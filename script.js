@@ -1,2144 +1,2461 @@
-
 /* =========================================================
    LINKA GIFT
    Gerador de Termo de Consignação
-   style.css
+   script.js
 ========================================================= */
 
+document.addEventListener("DOMContentLoaded", () => {
 
-/* =========================================================
-   RESET
-========================================================= */
+  /* =======================================================
+     ELEMENTOS PRINCIPAIS
+  ======================================================= */
 
-* {
-  box-sizing: border-box;
-  margin: 0;
-  padding: 0;
-}
+  const form = document.getElementById("formConsignacao");
 
-html {
-  scroll-behavior: smooth;
-}
+  const numeroConsignacao =
+    document.getElementById("numeroConsignacao");
 
-body {
-  min-height: 100vh;
-  font-family:
-    Inter,
-    Arial,
-    Helvetica,
-    sans-serif;
-  background:
-    linear-gradient(
-      180deg,
-      #f5f7fa 0%,
-      #eef2f6 100%
-    );
-  color: #1e293b;
-  -webkit-font-smoothing: antialiased;
-  text-rendering: optimizeLegibility;
-}
+  const dataConsignacao =
+    document.getElementById("dataConsignacao");
 
-button,
-input,
-select,
-textarea {
-  font: inherit;
-}
+  const listaProdutos =
+    document.getElementById("listaProdutos");
 
-button {
-  cursor: pointer;
-}
+  const btnAdicionarProduto =
+    document.getElementById("btnAdicionarProduto");
 
-img {
-  max-width: 100%;
-  display: block;
-}
+  const btnLimpar =
+    document.getElementById("btnLimpar");
 
-.oculto {
-  display: none !important;
-}
+  const btnEditar =
+    document.getElementById("btnEditar");
 
+  const btnImprimir =
+    document.getElementById("btnImprimir");
 
-/* =========================================================
-   VARIÁVEIS
-========================================================= */
+  const btnPDF =
+    document.getElementById("btnPDF");
 
-:root {
-  --azul: #10233f;
-  --azul-2: #17345a;
-  --azul-3: #244a78;
+  const btnCompartilhar =
+    document.getElementById("btnCompartilhar");
 
-  --dourado: #b7924b;
-  --dourado-claro: #d6bc80;
+  const totalUnidades =
+    document.getElementById("totalUnidades");
 
-  --branco: #ffffff;
-  --fundo: #f4f6f8;
+  const valorTotal =
+    document.getElementById("valorTotal");
 
-  --texto: #1f2937;
-  --texto-suave: #667085;
+  const observacoes =
+    document.getElementById("observacoes");
 
-  --borda: #dbe1e8;
-  --borda-2: #cfd7e1;
+  const contadorObservacoes =
+    document.getElementById("contadorObservacoes");
 
-  --verde: #1d8c63;
-  --vermelho: #b42318;
+  const areaPreview =
+    document.getElementById("areaPreview");
 
-  --sombra:
-    0 18px 50px rgba(16, 35, 63, 0.08);
-
-  --sombra-card:
-    0 8px 24px rgba(16, 35, 63, 0.07);
-
-  --raio: 18px;
-  --raio-menor: 12px;
-}
+  const confirmacao =
+    document.getElementById("confirmacao");
 
 
-/* =========================================================
-   TOPO
-========================================================= */
+  /* =======================================================
+     ASSINATURAS
+  ======================================================= */
 
-.topo {
-  width: 100%;
-  min-height: 72px;
+  const canvasAssinaturaLinka =
+    document.getElementById("canvasAssinaturaLinka");
 
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 20px;
+  const canvasAssinaturaLoja =
+    document.getElementById("canvasAssinaturaLoja");
 
-  padding:
-    calc(12px + env(safe-area-inset-top))
-    28px
-    12px;
+  const btnLimparAssinaturaLinka =
+    document.getElementById("btnLimparAssinaturaLinka");
 
-  background:
-    linear-gradient(
-      135deg,
-      #0f213b 0%,
-      #17345a 100%
-    );
+  const btnLimparAssinaturaLoja =
+    document.getElementById("btnLimparAssinaturaLoja");
 
-  color: white;
+  const statusAssinaturaLinka =
+    document.getElementById("statusAssinaturaLinka");
 
-  border-bottom:
-    3px solid var(--dourado);
+  const statusAssinaturaLoja =
+    document.getElementById("statusAssinaturaLoja");
 
-  box-shadow:
-    0 6px 20px rgba(9, 30, 58, 0.15);
+  const docImagemAssinaturaLinka =
+    document.getElementById("docImagemAssinaturaLinka");
 
-  position: sticky;
-  top: 0;
-  z-index: 50;
-}
+  const docImagemAssinaturaLoja =
+    document.getElementById("docImagemAssinaturaLoja");
 
-.marca {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-}
 
-.marca-simbolo {
-  width: 44px;
-  height: 44px;
+  /* =======================================================
+     MODAL
+  ======================================================= */
 
-  border-radius: 14px;
+  const modal =
+    document.getElementById("modal");
 
-  display: grid;
-  place-items: center;
+  const modalTitulo =
+    document.getElementById("modalTitulo");
 
-  background:
-    linear-gradient(
-      135deg,
-      #d7bd7d,
-      #a47c35
+  const modalMensagem =
+    document.getElementById("modalMensagem");
+
+  const modalIcone =
+    document.getElementById("modalIcone");
+
+  const btnFecharModal =
+    document.getElementById("btnFecharModal");
+
+  const modalOverlay =
+    modal.querySelector(".modal-overlay");
+
+
+  function mostrarModal(
+    titulo,
+    mensagem,
+    icone = "!"
+  ) {
+
+    modalTitulo.textContent = titulo;
+    modalMensagem.textContent = mensagem;
+    modalIcone.textContent = icone;
+
+    modal.classList.remove("oculto");
+
+    modal.setAttribute(
+      "aria-hidden",
+      "false"
     );
 
-  color: #10233f;
-
-  font-size: 14px;
-  font-weight: 900;
-
-  box-shadow:
-    inset 0 0 0 1px rgba(255, 255, 255, 0.25),
-    0 8px 18px rgba(0, 0, 0, 0.15);
-}
-
-.marca-texto {
-  display: flex;
-  align-items: baseline;
-  gap: 4px;
-}
-
-.marca-texto strong {
-  font-size: 23px;
-  letter-spacing: 1px;
-}
-
-.marca-texto span {
-  font-size: 16px;
-  color: var(--dourado-claro);
-  font-weight: 600;
-}
-
-.topo-info {
-  display: flex;
-  align-items: center;
-}
-
-.status-local {
-  font-size: 12px;
-  color: #d7e1ef;
-
-  padding: 8px 12px;
-
-  border:
-    1px solid rgba(255, 255, 255, 0.13);
-
-  background:
-    rgba(255, 255, 255, 0.06);
-
-  border-radius: 999px;
-}
+  }
 
 
-/* =========================================================
-   CONTAINER
-========================================================= */
+  function fecharModal() {
 
-.container {
-  width: min(100%, 1080px);
-  margin: 0 auto;
+    modal.classList.add("oculto");
 
-  padding:
-    34px
-    20px
-    60px;
-}
-
-
-/* =========================================================
-   HERO
-========================================================= */
-
-.hero {
-  margin-bottom: 28px;
-
-  padding: 30px;
-
-  border-radius: 24px;
-
-  background:
-    radial-gradient(
-      circle at top right,
-      rgba(183, 146, 75, 0.18),
-      transparent 34%
-    ),
-    linear-gradient(
-      145deg,
-      #ffffff 0%,
-      #f7f9fb 100%
+    modal.setAttribute(
+      "aria-hidden",
+      "true"
     );
 
-  border:
-    1px solid rgba(16, 35, 63, 0.08);
-
-  box-shadow: var(--sombra);
-}
-
-.hero-etiqueta {
-  display: inline-flex;
-
-  padding: 7px 12px;
-
-  border-radius: 999px;
-
-  background:
-    rgba(183, 146, 75, 0.12);
-
-  color: #8c6b2f;
-
-  font-size: 11px;
-  font-weight: 800;
-
-  letter-spacing: 1px;
-
-  margin-bottom: 12px;
-}
-
-.hero h1 {
-  font-size:
-    clamp(30px, 5vw, 48px);
-
-  line-height: 1.05;
-
-  color: var(--azul);
-
-  margin-bottom: 12px;
-
-  letter-spacing: -1.2px;
-}
-
-.hero h1 span {
-  display: block;
-  color: var(--dourado);
-}
-
-.hero > p {
-  max-width: 700px;
-
-  font-size: 15px;
-  line-height: 1.65;
-
-  color: var(--texto-suave);
-}
-
-.privacidade {
-  margin-top: 22px;
-
-  padding: 14px 16px;
-
-  display: flex;
-  align-items: flex-start;
-  gap: 12px;
-
-  background: #f0f7f4;
-
-  border:
-    1px solid #cde8dc;
-
-  border-radius: 14px;
-}
-
-.privacidade-icone {
-  font-size: 20px;
-  line-height: 1;
-}
-
-.privacidade div {
-  display: flex;
-  flex-direction: column;
-  gap: 3px;
-}
-
-.privacidade strong {
-  font-size: 13px;
-  color: #156447;
-}
-
-.privacidade small {
-  font-size: 12px;
-  line-height: 1.45;
-  color: #4d6e60;
-}
+  }
 
 
-/* =========================================================
-   FORMULÁRIO
-========================================================= */
+  btnFecharModal.addEventListener(
+    "click",
+    fecharModal
+  );
 
-#formConsignacao {
-  display: flex;
-  flex-direction: column;
-  gap: 20px;
-}
 
-.card {
-  background: white;
+  modalOverlay.addEventListener(
+    "click",
+    fecharModal
+  );
 
-  border-radius: var(--raio);
 
-  border:
-    1px solid rgba(16, 35, 63, 0.08);
+  /* =======================================================
+     SISTEMA DE ASSINATURA DIGITAL
+  ======================================================= */
 
-  box-shadow: var(--sombra-card);
+  function criarAssinaturaDigital(
+    canvas,
+    botaoLimpar,
+    status,
+    imagemDocumento
+  ) {
 
-  padding: 24px;
-}
+    const contexto =
+      canvas.getContext("2d");
 
-.card-cabecalho {
-  display: flex;
-  align-items: center;
-  gap: 14px;
+    let assinando = false;
 
-  margin-bottom: 22px;
+    let assinaturaFeita = false;
 
-  padding-bottom: 16px;
 
-  border-bottom:
-    1px solid #edf0f4;
-}
+    /* -------------------------------------------------------
+       CONFIGURAR CANETA
+    ------------------------------------------------------- */
 
-.numero-secao {
-  min-width: 40px;
-  height: 40px;
+    function prepararContexto() {
 
-  display: grid;
-  place-items: center;
+      contexto.lineWidth = 2.4;
 
-  border-radius: 12px;
+      contexto.lineCap = "round";
 
-  background:
-    linear-gradient(
-      135deg,
-      var(--azul),
-      var(--azul-2)
+      contexto.lineJoin = "round";
+
+      contexto.strokeStyle = "#10233f";
+
+    }
+
+
+    /* -------------------------------------------------------
+       AJUSTAR TAMANHO DO CANVAS
+    ------------------------------------------------------- */
+
+    function ajustarCanvas(
+      preservar = true
+    ) {
+
+      const rect =
+        canvas.getBoundingClientRect();
+
+
+      if (
+        !rect.width ||
+        !rect.height
+      ) {
+
+        return;
+
+      }
+
+
+      const imagemAnterior =
+        preservar &&
+        assinaturaFeita
+          ? canvas.toDataURL("image/png")
+          : null;
+
+
+      const proporcao =
+        window.devicePixelRatio || 1;
+
+
+      canvas.width =
+        Math.round(
+          rect.width * proporcao
+        );
+
+
+      canvas.height =
+        Math.round(
+          rect.height * proporcao
+        );
+
+
+      contexto.setTransform(
+        proporcao,
+        0,
+        0,
+        proporcao,
+        0,
+        0
+      );
+
+
+      prepararContexto();
+
+
+      if (imagemAnterior) {
+
+        const imagem =
+          new Image();
+
+
+        imagem.onload = () => {
+
+          contexto.drawImage(
+            imagem,
+            0,
+            0,
+            rect.width,
+            rect.height
+          );
+
+
+          prepararContexto();
+
+        };
+
+
+        imagem.src =
+          imagemAnterior;
+
+      }
+
+    }
+
+
+    /* -------------------------------------------------------
+       POSIÇÃO DO DEDO / MOUSE
+    ------------------------------------------------------- */
+
+    function pegarPosicao(
+      evento
+    ) {
+
+      const rect =
+        canvas.getBoundingClientRect();
+
+
+      return {
+
+        x:
+          evento.clientX -
+          rect.left,
+
+        y:
+          evento.clientY -
+          rect.top
+
+      };
+
+    }
+
+
+    /* -------------------------------------------------------
+       INICIAR ASSINATURA
+    ------------------------------------------------------- */
+
+    function iniciar(
+      evento
+    ) {
+
+      evento.preventDefault();
+
+
+      assinando = true;
+
+      assinaturaFeita = true;
+
+
+      const posicao =
+        pegarPosicao(
+          evento
+        );
+
+
+      contexto.beginPath();
+
+
+      contexto.moveTo(
+        posicao.x,
+        posicao.y
+      );
+
+
+      status.textContent =
+        "Assinado";
+
+
+      status.classList.add(
+        "assinado"
+      );
+
+
+      try {
+
+        canvas.setPointerCapture(
+          evento.pointerId
+        );
+
+      } catch (_) {}
+
+    }
+
+
+    /* -------------------------------------------------------
+       DESENHAR
+    ------------------------------------------------------- */
+
+    function desenhar(
+      evento
+    ) {
+
+      if (!assinando) {
+
+        return;
+
+      }
+
+
+      evento.preventDefault();
+
+
+      const posicao =
+        pegarPosicao(
+          evento
+        );
+
+
+      contexto.lineTo(
+        posicao.x,
+        posicao.y
+      );
+
+
+      contexto.stroke();
+
+    }
+
+
+    /* -------------------------------------------------------
+       FINALIZAR
+    ------------------------------------------------------- */
+
+    function finalizar(
+      evento
+    ) {
+
+      if (!assinando) {
+
+        return;
+
+      }
+
+
+      assinando = false;
+
+
+      contexto.closePath();
+
+
+      if (
+        evento &&
+        evento.pointerId !== undefined
+      ) {
+
+        try {
+
+          canvas.releasePointerCapture(
+            evento.pointerId
+          );
+
+        } catch (_) {}
+
+      }
+
+    }
+
+
+    /* -------------------------------------------------------
+       LIMPAR
+    ------------------------------------------------------- */
+
+    function limpar() {
+
+      contexto.save();
+
+
+      contexto.setTransform(
+        1,
+        0,
+        0,
+        1,
+        0,
+        0
+      );
+
+
+      contexto.clearRect(
+        0,
+        0,
+        canvas.width,
+        canvas.height
+      );
+
+
+      contexto.restore();
+
+
+      prepararContexto();
+
+
+      assinaturaFeita = false;
+
+      assinando = false;
+
+
+      imagemDocumento.removeAttribute(
+        "src"
+      );
+
+
+      imagemDocumento.classList.remove(
+        "ativa"
+      );
+
+
+      status.textContent =
+        "Aguardando";
+
+
+      status.classList.remove(
+        "assinado"
+      );
+
+    }
+
+
+    /* -------------------------------------------------------
+       ENVIAR ASSINATURA PARA O DOCUMENTO
+    ------------------------------------------------------- */
+
+    function atualizarDocumento() {
+
+      if (!assinaturaFeita) {
+
+        imagemDocumento.removeAttribute(
+          "src"
+        );
+
+
+        imagemDocumento.classList.remove(
+          "ativa"
+        );
+
+
+        return;
+
+      }
+
+
+      imagemDocumento.src =
+        canvas.toDataURL(
+          "image/png"
+        );
+
+
+      imagemDocumento.classList.add(
+        "ativa"
+      );
+
+    }
+
+
+    /* -------------------------------------------------------
+       EVENTOS
+    ------------------------------------------------------- */
+
+    canvas.addEventListener(
+      "pointerdown",
+      iniciar
     );
 
-  color: white;
 
-  font-size: 13px;
-  font-weight: 800;
-
-  border:
-    1px solid rgba(183, 146, 75, 0.45);
-
-  box-shadow:
-    0 6px 14px rgba(16, 35, 63, 0.15);
-}
-
-.card-cabecalho h2 {
-  font-size: 18px;
-  color: var(--azul);
-  margin-bottom: 2px;
-}
-
-.card-cabecalho p {
-  font-size: 12px;
-  color: var(--texto-suave);
-}
-
-
-/* =========================================================
-   GRIDS
-========================================================= */
-
-.grid {
-  display: grid;
-  gap: 16px;
-}
-
-.grid-2 {
-  grid-template-columns:
-    repeat(2, minmax(0, 1fr));
-}
-
-.grid-3 {
-  grid-template-columns:
-    0.7fr 1fr 1fr;
-}
-
-
-/* =========================================================
-   CAMPOS
-========================================================= */
-
-.campo {
-  display: flex;
-  flex-direction: column;
-  gap: 7px;
-}
-
-.campo label {
-  font-size: 12px;
-  font-weight: 700;
-
-  color: #344054;
-}
-
-.campo input,
-.campo select,
-.campo textarea {
-  width: 100%;
-
-  border:
-    1px solid var(--borda);
-
-  border-radius: 11px;
-
-  background: #ffffff;
-
-  color: #172033;
-
-  min-height: 45px;
-
-  padding: 11px 13px;
-
-  outline: none;
-
-  transition:
-    border-color 0.18s ease,
-    box-shadow 0.18s ease,
-    background 0.18s ease;
-}
-
-.campo textarea {
-  resize: vertical;
-  min-height: 88px;
-}
-
-.campo input::placeholder,
-.campo textarea::placeholder {
-  color: #a6afbc;
-}
-
-.campo input:focus,
-.campo select:focus,
-.campo textarea:focus {
-  border-color: #315d91;
-
-  box-shadow:
-    0 0 0 4px rgba(49, 93, 145, 0.1);
-}
-
-.campo input[readonly] {
-  background: #f5f7fa;
-  color: #475467;
-  cursor: default;
-}
-
-.uppercase {
-  text-transform: uppercase;
-}
-
-.contador {
-  align-self: flex-end;
-
-  font-size: 10px;
-  color: #98a2b3;
-}
-
-
-/* =========================================================
-   INPUT MOEDA
-========================================================= */
-
-.input-moeda {
-  display: flex;
-  align-items: center;
-
-  border:
-    1px solid var(--borda);
-
-  border-radius: 11px;
-
-  overflow: hidden;
-
-  background: white;
-
-  transition:
-    border-color 0.18s ease,
-    box-shadow 0.18s ease;
-}
-
-.input-moeda:focus-within {
-  border-color: #315d91;
-
-  box-shadow:
-    0 0 0 4px rgba(49, 93, 145, 0.1);
-}
-
-.input-moeda span {
-  min-height: 45px;
-
-  display: grid;
-  place-items: center;
-
-  padding: 0 12px;
-
-  background: #f5f7fa;
-
-  border-right:
-    1px solid var(--borda);
-
-  color: #475467;
-
-  font-size: 12px;
-  font-weight: 700;
-}
-
-.input-moeda input {
-  border: 0;
-  border-radius: 0;
-
-  min-height: 43px;
-
-  box-shadow: none !important;
-}
-
-
-/* =========================================================
-   PRODUTOS
-========================================================= */
-
-#listaProdutos {
-  display: flex;
-  flex-direction: column;
-  gap: 16px;
-}
-
-.produto-item {
-  padding: 18px;
-
-  border-radius: 15px;
-
-  border:
-    1px solid #dfe5eb;
-
-  background:
-    linear-gradient(
-      180deg,
-      #ffffff,
-      #fafbfc
-    );
-}
-
-.produto-topo {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-
-  margin-bottom: 15px;
-}
-
-.produto-topo strong {
-  font-size: 12px;
-
-  color: var(--azul);
-
-  background:
-    rgba(16, 35, 63, 0.06);
-
-  padding: 6px 10px;
-
-  border-radius: 8px;
-}
-
-.produto-subtotal {
-  margin-top: 15px;
-
-  padding-top: 13px;
-
-  border-top:
-    1px dashed #d9e0e7;
-
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-
-  gap: 10px;
-}
-
-.produto-subtotal span {
-  font-size: 12px;
-  color: var(--texto-suave);
-}
-
-.produto-subtotal strong {
-  font-size: 16px;
-  color: var(--azul);
-}
-
-.btn-adicionar {
-  margin-top: 16px;
-
-  width: 100%;
-
-  min-height: 45px;
-
-  border-radius: 11px;
-
-  border:
-    1px dashed #aebcca;
-
-  background: #f8fafc;
-
-  color: #315d91;
-
-  font-size: 13px;
-  font-weight: 700;
-
-  transition:
-    background 0.18s ease,
-    border-color 0.18s ease;
-}
-
-.btn-adicionar:hover {
-  background: #eef4fa;
-  border-color: #6f8dac;
-}
-
-.btn-adicionar span {
-  margin-right: 5px;
-}
-
-
-/* =========================================================
-   RESUMO DOS PRODUTOS
-========================================================= */
-
-.resumo-produtos {
-  margin-top: 18px;
-
-  display: grid;
-  grid-template-columns:
-    repeat(2, minmax(0, 1fr));
-
-  gap: 12px;
-}
-
-.resumo-produtos > div {
-  min-height: 86px;
-
-  padding: 16px;
-
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  gap: 4px;
-
-  border-radius: 14px;
-
-  background:
-    linear-gradient(
-      135deg,
-      #10233f,
-      #18395f
+    canvas.addEventListener(
+      "pointermove",
+      desenhar
     );
 
-  color: white;
 
-  border:
-    1px solid rgba(183, 146, 75, 0.35);
-}
-
-.resumo-produtos span {
-  font-size: 11px;
-  color: #cad5e3;
-}
-
-.resumo-produtos strong {
-  font-size: 22px;
-  color: white;
-}
-
-
-/* =========================================================
-   TERMO RESUMO
-========================================================= */
-
-.card-termo {
-  border-top:
-    4px solid var(--dourado);
-}
-
-.termo-resumo {
-  padding: 18px;
-
-  border-radius: 13px;
-
-  background: #f8f9fb;
-
-  border:
-    1px solid #e7eaee;
-
-  margin-bottom: 18px;
-}
-
-.termo-resumo h3 {
-  color: var(--azul);
-  font-size: 14px;
-  margin-bottom: 10px;
-}
-
-.termo-resumo p {
-  font-size: 12px;
-  line-height: 1.6;
-
-  color: #5c6676;
-
-  margin-bottom: 8px;
-}
-
-.termo-resumo p:last-child {
-  margin-bottom: 0;
-}
-
-
-/* =========================================================
-   CHECKBOX
-========================================================= */
-
-.checkbox-confirmacao {
-  display: flex;
-  align-items: flex-start;
-
-  gap: 11px;
-
-  cursor: pointer;
-
-  user-select: none;
-}
-
-.checkbox-confirmacao input {
-  position: absolute;
-  opacity: 0;
-  pointer-events: none;
-}
-
-.check-visual {
-  width: 22px;
-  height: 22px;
-
-  flex-shrink: 0;
-
-  border-radius: 6px;
-
-  border:
-    2px solid #b7c0ca;
-
-  background: white;
-
-  position: relative;
-
-  transition: 0.18s ease;
-}
-
-.checkbox-confirmacao input:checked + .check-visual {
-  background: var(--azul);
-  border-color: var(--azul);
-}
-
-.checkbox-confirmacao input:checked + .check-visual::after {
-  content: "";
-
-  position: absolute;
-
-  width: 5px;
-  height: 10px;
-
-  border:
-    solid white;
-
-  border-width:
-    0 2px 2px 0;
-
-  transform: rotate(45deg);
-
-  left: 7px;
-  top: 3px;
-}
-
-.checkbox-confirmacao > span:last-child {
-  font-size: 12px;
-  line-height: 1.55;
-
-  color: #475467;
-}
-
-
-/* =========================================================
-   BOTÕES
-========================================================= */
-
-.acoes,
-.acoes-documento {
-  display: flex;
-  gap: 12px;
-
-  justify-content: flex-end;
-
-  flex-wrap: wrap;
-}
-
-.btn {
-  min-height: 46px;
-
-  padding: 0 18px;
-
-  border-radius: 11px;
-
-  border: 0;
-
-  font-size: 13px;
-  font-weight: 800;
-
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  gap: 7px;
-
-  transition:
-    transform 0.16s ease,
-    box-shadow 0.16s ease,
-    opacity 0.16s ease;
-}
-
-.btn:hover {
-  transform: translateY(-1px);
-}
-
-.btn:active {
-  transform: translateY(0);
-}
-
-.btn-principal {
-  background:
-    linear-gradient(
-      135deg,
-      #10233f,
-      #1d4776
+    canvas.addEventListener(
+      "pointerup",
+      finalizar
     );
 
-  color: white;
 
-  box-shadow:
-    0 10px 22px rgba(16, 35, 63, 0.2);
-}
-
-.btn-secundario {
-  background: white;
-
-  color: var(--azul);
-
-  border:
-    1px solid #cfd8e3;
-}
-
-.btn-destaque {
-  background:
-    linear-gradient(
-      135deg,
-      #b7924b,
-      #d0ad66
+    canvas.addEventListener(
+      "pointercancel",
+      finalizar
     );
 
-  color: #10233f;
 
-  box-shadow:
-    0 10px 22px rgba(183, 146, 75, 0.22);
-}
-
-
-/* =========================================================
-   PRÉ-VISUALIZAÇÃO
-========================================================= */
-
-.preview-container {
-  margin-top: 36px;
-
-  padding-top: 30px;
-
-  border-top:
-    1px solid #dce2e8;
-}
-
-.preview-cabecalho {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-
-  gap: 20px;
-
-  margin-bottom: 18px;
-}
-
-.preview-etiqueta {
-  font-size: 10px;
-  font-weight: 800;
-
-  color: #8e6c2d;
-
-  letter-spacing: 1px;
-}
-
-.preview-cabecalho h2 {
-  margin-top: 5px;
-
-  color: var(--azul);
-
-  font-size: 22px;
-}
-
-.btn-editar {
-  min-height: 40px;
-
-  padding: 0 14px;
-
-  border-radius: 10px;
-
-  border:
-    1px solid #d4dce5;
-
-  background: white;
-
-  color: var(--azul);
-
-  font-size: 12px;
-  font-weight: 700;
-}
-
-
-/* =========================================================
-   DOCUMENTO A4
-========================================================= */
-
-.documento-a4 {
-  width: 210mm;
-  min-height: 297mm;
-
-  margin: 0 auto 20px;
-
-  padding:
-    12mm
-    13mm
-    10mm;
-
-  background: white;
-
-  color: #1f2933;
-
-  box-shadow:
-    0 20px 55px rgba(17, 34, 51, 0.18);
-
-  position: relative;
-
-  overflow: hidden;
-}
-
-.documento-a4::before {
-  content: "";
-
-  position: absolute;
-
-  top: 0;
-  left: 0;
-  right: 0;
-
-  height: 5mm;
-
-  background:
-    linear-gradient(
-      90deg,
-      var(--azul) 0%,
-      var(--azul) 72%,
-      var(--dourado) 72%,
-      var(--dourado) 100%
+    canvas.addEventListener(
+      "pointerleave",
+      finalizar
     );
-}
 
 
-/* =========================================================
-   TOPO DO DOCUMENTO
-========================================================= */
+    botaoLimpar.addEventListener(
+      "click",
+      limpar
+    );
 
-.doc-topo {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
 
-  gap: 15px;
+    return {
 
-  padding-top: 4mm;
-  padding-bottom: 4mm;
+      ajustarCanvas,
 
-  border-bottom:
-    1px solid #d6dce3;
-}
+      limpar,
 
-.doc-marca {
-  display: flex;
-  align-items: baseline;
-  gap: 3px;
+      atualizarDocumento,
 
-  white-space: nowrap;
-}
+      foiAssinada: () =>
+        assinaturaFeita
 
-.doc-marca strong {
-  font-size: 19pt;
+    };
 
-  color: var(--azul);
-
-  letter-spacing: 0.5px;
-}
-
-.doc-marca span {
-  font-size: 10pt;
-
-  color: var(--dourado);
-
-  font-weight: 700;
-}
-
-.doc-titulo {
-  text-align: right;
-}
-
-.doc-titulo h1 {
-  font-size: 10pt;
-
-  line-height: 1.2;
-
-  color: var(--azul);
-
-  letter-spacing: 0.3px;
-}
-
-.doc-titulo p {
-  margin-top: 2px;
-
-  font-size: 8pt;
-
-  font-weight: 800;
-
-  color: var(--dourado);
-
-  letter-spacing: 1px;
-}
-
-
-/* =========================================================
-   IDENTIFICAÇÃO DO DOCUMENTO
-========================================================= */
-
-.doc-identificacao {
-  display: grid;
-
-  grid-template-columns:
-    1.6fr 1fr;
-
-  margin-top: 4mm;
-
-  border:
-    1px solid #d6dde5;
-
-  border-radius: 3mm;
-
-  overflow: hidden;
-}
-
-.doc-identificacao > div {
-  min-height: 13mm;
-
-  padding: 2.5mm 4mm;
-
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-}
-
-.doc-identificacao > div + div {
-  border-left:
-    1px solid #d6dde5;
-}
-
-.doc-identificacao span {
-  font-size: 6.5pt;
-
-  font-weight: 800;
-
-  color: #748092;
-
-  letter-spacing: 0.6px;
-}
-
-.doc-identificacao strong {
-  margin-top: 1mm;
-
-  font-size: 9pt;
-
-  color: var(--azul);
-}
-
-
-/* =========================================================
-   SEÇÕES DO DOCUMENTO
-========================================================= */
-
-.doc-secao {
-  margin-top: 4mm;
-}
-
-.doc-secao h2 {
-  min-height: 7mm;
-
-  padding: 1.7mm 3mm;
-
-  display: flex;
-  align-items: center;
-
-  background: var(--azul);
-
-  color: white;
-
-  font-size: 7pt;
-
-  letter-spacing: 0.4px;
-}
-
-.doc-dados {
-  border:
-    1px solid #d9dfe6;
-
-  border-top: 0;
-}
-
-.doc-dados > p,
-.doc-duplo p {
-  min-height: 8mm;
-
-  display: flex;
-  align-items: center;
-  gap: 2mm;
-
-  padding: 1.8mm 3mm;
-
-  font-size: 7pt;
-
-  border-bottom:
-    1px solid #e3e7ec;
-}
-
-.doc-dados > p:last-child {
-  border-bottom: 0;
-}
-
-.doc-dados span,
-.doc-condicoes span,
-.doc-observacoes span {
-  font-weight: 700;
-  color: #556070;
-}
-
-.doc-dados strong {
-  font-weight: 600;
-  color: #1e2935;
-}
-
-.doc-duplo {
-  display: grid;
-
-  grid-template-columns:
-    repeat(2, minmax(0, 1fr));
-
-  border-bottom:
-    1px solid #e3e7ec;
-}
-
-.doc-duplo p {
-  border-bottom: 0;
-}
-
-.doc-duplo p:first-child {
-  border-right:
-    1px solid #e3e7ec;
-}
-
-
-/* =========================================================
-   TABELA DO DOCUMENTO
-========================================================= */
-
-.doc-tabela-wrapper {
-  border:
-    1px solid #d9dfe6;
-
-  border-top: 0;
-
-  overflow: hidden;
-}
-
-.doc-tabela {
-  width: 100%;
-  border-collapse: collapse;
-
-  table-layout: fixed;
-}
-
-.doc-tabela th,
-.doc-tabela td {
-  padding:
-    2.2mm
-    2mm;
-
-  border-right:
-    1px solid #dfe4ea;
-
-  border-bottom:
-    1px solid #dfe4ea;
-
-  font-size: 6.7pt;
-
-  text-align: left;
-
-  vertical-align: middle;
-
-  word-wrap: break-word;
-}
-
-.doc-tabela th {
-  background: #f2f4f7;
-
-  color: var(--azul);
-
-  font-size: 6.3pt;
-  font-weight: 800;
-}
-
-.doc-tabela th:nth-child(1) {
-  width: 48%;
-}
-
-.doc-tabela th:nth-child(2) {
-  width: 10%;
-  text-align: center;
-}
-
-.doc-tabela th:nth-child(3),
-.doc-tabela th:nth-child(4) {
-  width: 21%;
-  text-align: center;
-}
-
-.doc-tabela td:nth-child(2),
-.doc-tabela td:nth-child(3),
-.doc-tabela td:nth-child(4) {
-  text-align: center;
-}
-
-.doc-tabela th:last-child,
-.doc-tabela td:last-child {
-  border-right: 0;
-}
-
-.doc-tabela tr:last-child td {
-  border-bottom: 0;
-}
-
-
-/* =========================================================
-   TOTAIS DOCUMENTO
-========================================================= */
-
-.doc-totais {
-  display: grid;
-
-  grid-template-columns:
-    1fr 1fr;
-
-  gap: 2mm;
-
-  margin-top: 2mm;
-}
-
-.doc-totais > div {
-  min-height: 11mm;
-
-  padding: 2mm 3mm;
-
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-
-  gap: 3mm;
-
-  background: #f7f9fb;
-
-  border:
-    1px solid #dce2e8;
-
-  border-radius: 2.5mm;
-}
-
-.doc-totais span {
-  font-size: 6.4pt;
-  color: #657080;
-}
-
-.doc-totais strong {
-  font-size: 8pt;
-  color: var(--azul);
-}
-
-
-/* =========================================================
-   TEXTO DAS CONDIÇÕES
-========================================================= */
-
-.doc-texto {
-  padding: 3mm;
-
-  border:
-    1px solid #d9dfe6;
-
-  border-top: 0;
-}
-
-.doc-texto p {
-  font-size: 6.6pt;
-
-  line-height: 1.5;
-
-  color: #394453;
-
-  margin-bottom: 1.5mm;
-}
-
-.doc-texto p:last-child {
-  margin-bottom: 0;
-}
-
-.doc-condicoes {
-  margin-top: 2mm;
-
-  display: grid;
-
-  grid-template-columns:
-    1fr 1fr;
-
-  gap: 2mm;
-}
-
-.doc-condicoes p {
-  min-height: 9mm;
-
-  padding: 2mm 3mm;
-
-  display: flex;
-  align-items: center;
-  gap: 2mm;
-
-  border:
-    1px solid #dce2e8;
-
-  border-radius: 2.5mm;
-
-  font-size: 6.5pt;
-}
-
-.doc-observacoes {
-  margin-top: 2mm;
-
-  padding: 2.5mm 3mm;
-
-  border:
-    1px solid #dce2e8;
-
-  border-radius: 2.5mm;
-
-  background: #fafbfc;
-}
-
-.doc-observacoes span {
-  font-size: 6.5pt;
-}
-
-.doc-observacoes p {
-  margin-top: 1mm;
-
-  font-size: 6.5pt;
-  line-height: 1.45;
-}
-
-
-/* =========================================================
-   DECLARAÇÃO
-========================================================= */
-
-.doc-declaracao {
-  padding: 3mm;
-
-  border:
-    1px solid #d9dfe6;
-
-  border-top: 0;
-
-  font-size: 6.7pt;
-
-  line-height: 1.5;
-
-  color: #394453;
-}
-
-.doc-local-data {
-  margin-top: 3mm;
-
-  display: flex;
-  justify-content: space-between;
-
-  gap: 5mm;
-}
-
-.doc-local-data p {
-  width: 50%;
-
-  font-size: 6.7pt;
-
-  color: #3e4856;
-}
-
-.doc-local-data span {
-  color: #7b8490;
-}
-
-
-/* =========================================================
-   ASSINATURAS
-========================================================= */
-
-.assinaturas {
-  margin-top: 9mm;
-
-  display: grid;
-
-  grid-template-columns:
-    repeat(2, minmax(0, 1fr));
-
-  gap: 13mm;
-}
-
-.assinatura {
-  text-align: center;
-}
-
-.linha-assinatura {
-  border-top:
-    1px solid #4b5563;
-
-  margin-bottom: 2mm;
-}
-
-.assinatura strong {
-  display: block;
-
-  font-size: 7pt;
-
-  color: var(--azul);
-}
-
-.assinatura span {
-  display: block;
-
-  margin-top: 1mm;
-
-  font-size: 6pt;
-
-  color: #7a8491;
-}
-
-
-/* =========================================================
-   RODAPÉ DOCUMENTO
-========================================================= */
-
-.doc-rodape {
-  margin-top: 6mm;
-
-  text-align: center;
-}
-
-.doc-rodape > p {
-  max-width: 165mm;
-
-  margin: 0 auto 3mm;
-
-  font-size: 5.8pt;
-
-  line-height: 1.45;
-
-  color: #6a7481;
-}
-
-.doc-rodape-marca {
-  min-height: 7mm;
-
-  display: grid;
-  place-items: center;
-
-  padding: 1.3mm 3mm;
-
-  background: var(--azul);
-
-  color: white;
-
-  font-size: 6.3pt;
-  font-weight: 700;
-
-  letter-spacing: 0.4px;
-}
-
-
-/* =========================================================
-   AÇÕES DOCUMENTO
-========================================================= */
-
-.acoes-documento {
-  margin-top: 12px;
-}
-
-.aviso-compartilhamento {
-  margin-top: 10px;
-
-  font-size: 11px;
-
-  color: #7a8490;
-
-  text-align: right;
-}
-
-
-/* =========================================================
-   RODAPÉ SITE
-========================================================= */
-
-.rodape-site {
-  padding:
-    30px
-    20px
-    calc(30px + env(safe-area-inset-bottom));
-
-  text-align: center;
-
-  background: #0f213b;
-
-  color: white;
-
-  display: flex;
-  flex-direction: column;
-  gap: 4px;
-}
-
-.rodape-site strong {
-  font-size: 16px;
-}
-
-.rodape-site span {
-  color: #c6d0dc;
-  font-size: 12px;
-}
-
-.rodape-site small {
-  color: #8999ac;
-  font-size: 10px;
-}
-
-
-/* =========================================================
-   MODAL
-========================================================= */
-
-.modal {
-  position: fixed;
-  inset: 0;
-
-  z-index: 200;
-
-  display: grid;
-  place-items: center;
-
-  padding: 20px;
-}
-
-.modal-overlay {
-  position: absolute;
-  inset: 0;
-
-  background:
-    rgba(9, 19, 34, 0.72);
-
-  backdrop-filter:
-    blur(4px);
-}
-
-.modal-conteudo {
-  width: min(100%, 400px);
-
-  position: relative;
-  z-index: 2;
-
-  background: white;
-
-  border-radius: 18px;
-
-  padding: 28px;
-
-  text-align: center;
-
-  box-shadow:
-    0 24px 60px rgba(0, 0, 0, 0.25);
-
-  border:
-    1px solid rgba(255, 255, 255, 0.5);
-}
-
-.modal-icone {
-  width: 54px;
-  height: 54px;
-
-  margin: 0 auto 14px;
-
-  border-radius: 50%;
-
-  display: grid;
-  place-items: center;
-
-  background:
-    rgba(16, 35, 63, 0.08);
-
-  color: var(--azul);
-
-  font-size: 24px;
-  font-weight: 900;
-}
-
-.modal-conteudo h2 {
-  color: var(--azul);
-
-  font-size: 20px;
-
-  margin-bottom: 8px;
-}
-
-.modal-conteudo p {
-  color: #667085;
-
-  font-size: 13px;
-  line-height: 1.55;
-
-  margin-bottom: 18px;
-}
-
-.modal-conteudo .btn {
-  width: 100%;
-}
-
-
-/* =========================================================
-   RESPONSIVO
-========================================================= */
-
-@media (max-width: 850px) {
-
-  .topo {
-    padding-left: 18px;
-    padding-right: 18px;
   }
 
-  .status-local {
-    display: none;
+
+  /* =======================================================
+     CRIAR AS DUAS ASSINATURAS
+  ======================================================= */
+
+  const assinaturaLinka =
+    criarAssinaturaDigital(
+      canvasAssinaturaLinka,
+      btnLimparAssinaturaLinka,
+      statusAssinaturaLinka,
+      docImagemAssinaturaLinka
+    );
+
+
+  const assinaturaLoja =
+    criarAssinaturaDigital(
+      canvasAssinaturaLoja,
+      btnLimparAssinaturaLoja,
+      statusAssinaturaLoja,
+      docImagemAssinaturaLoja
+    );
+
+
+  /* =======================================================
+     DATA PADRÃO
+  ======================================================= */
+
+  function definirDataAtual() {
+
+    const agora =
+      new Date();
+
+
+    const ano =
+      agora.getFullYear();
+
+
+    const mes =
+      String(
+        agora.getMonth() + 1
+      ).padStart(
+        2,
+        "0"
+      );
+
+
+    const dia =
+      String(
+        agora.getDate()
+      ).padStart(
+        2,
+        "0"
+      );
+
+
+    dataConsignacao.value =
+      `${ano}-${mes}-${dia}`;
+
   }
 
-  .container {
-    padding:
-      24px
-      14px
-      45px;
+
+  /* =======================================================
+     NÚMERO AUTOMÁTICO
+  ======================================================= */
+
+  function gerarNumeroConsignacao() {
+
+    const agora =
+      new Date();
+
+
+    const ano =
+      agora.getFullYear();
+
+
+    const mes =
+      String(
+        agora.getMonth() + 1
+      ).padStart(
+        2,
+        "0"
+      );
+
+
+    const dia =
+      String(
+        agora.getDate()
+      ).padStart(
+        2,
+        "0"
+      );
+
+
+    const hora =
+      String(
+        agora.getHours()
+      ).padStart(
+        2,
+        "0"
+      );
+
+
+    const minuto =
+      String(
+        agora.getMinutes()
+      ).padStart(
+        2,
+        "0"
+      );
+
+
+    const segundo =
+      String(
+        agora.getSeconds()
+      ).padStart(
+        2,
+        "0"
+      );
+
+
+    numeroConsignacao.value =
+      `CON-${ano}${mes}${dia}-${hora}${minuto}${segundo}`;
+
   }
 
-  .hero {
-    padding: 23px;
+
+  /* =======================================================
+     MOEDA
+  ======================================================= */
+
+  function valorParaNumero(
+    valor
+  ) {
+
+    if (!valor) {
+
+      return 0;
+
+    }
+
+
+    const texto =
+      String(valor)
+        .replace(/\s/g, "")
+        .replace("R$", "")
+        .replace(/\./g, "")
+        .replace(",", ".")
+        .trim();
+
+
+    const numero =
+      parseFloat(
+        texto
+      );
+
+
+    return Number.isFinite(
+      numero
+    )
+      ? numero
+      : 0;
+
   }
 
-  .hero h1 {
-    font-size: 35px;
+
+  function numeroParaMoeda(
+    valor
+  ) {
+
+    return Number(
+      valor || 0
+    ).toLocaleString(
+      "pt-BR",
+      {
+
+        style: "currency",
+
+        currency: "BRL"
+
+      }
+    );
+
   }
 
-  .card {
-    padding: 19px;
+
+  function formatarCampoMoeda(
+    input
+  ) {
+
+    let valor =
+      input.value.replace(
+        /\D/g,
+        ""
+      );
+
+
+    if (!valor) {
+
+      input.value = "";
+
+      calcularTotais();
+
+      return;
+
+    }
+
+
+    valor =
+      Number(valor) / 100;
+
+
+    input.value =
+      valor.toLocaleString(
+        "pt-BR",
+        {
+
+          minimumFractionDigits: 2,
+
+          maximumFractionDigits: 2
+
+        }
+      );
+
+
+    calcularTotais();
+
   }
 
-  .grid-2,
-  .grid-3 {
-    grid-template-columns: 1fr;
+
+  /* =======================================================
+     TELEFONE
+  ======================================================= */
+
+  const telefone =
+    document.getElementById(
+      "telefone"
+    );
+
+
+  telefone.addEventListener(
+    "input",
+    () => {
+
+      let valor =
+        telefone.value
+          .replace(
+            /\D/g,
+            ""
+          )
+          .slice(
+            0,
+            11
+          );
+
+
+      if (
+        valor.length <= 10
+      ) {
+
+        valor =
+          valor.replace(
+            /^(\d{2})(\d)/,
+            "($1) $2"
+          );
+
+
+        valor =
+          valor.replace(
+            /(\d{4})(\d)/,
+            "$1-$2"
+          );
+
+      } else {
+
+        valor =
+          valor.replace(
+            /^(\d{2})(\d)/,
+            "($1) $2"
+          );
+
+
+        valor =
+          valor.replace(
+            /(\d{5})(\d)/,
+            "$1-$2"
+          );
+
+      }
+
+
+      telefone.value =
+        valor;
+
+    }
+  );
+
+
+  /* =======================================================
+     CPF / CNPJ
+  ======================================================= */
+
+  const cnpj =
+    document.getElementById(
+      "cnpj"
+    );
+
+
+  cnpj.addEventListener(
+    "input",
+    () => {
+
+      let valor =
+        cnpj.value
+          .replace(
+            /\D/g,
+            ""
+          )
+          .slice(
+            0,
+            14
+          );
+
+
+      if (
+        valor.length <= 11
+      ) {
+
+        valor =
+          valor.replace(
+            /(\d{3})(\d)/,
+            "$1.$2"
+          );
+
+
+        valor =
+          valor.replace(
+            /(\d{3})(\d)/,
+            "$1.$2"
+          );
+
+
+        valor =
+          valor.replace(
+            /(\d{3})(\d{1,2})$/,
+            "$1-$2"
+          );
+
+      } else {
+
+        valor =
+          valor.replace(
+            /^(\d{2})(\d)/,
+            "$1.$2"
+          );
+
+
+        valor =
+          valor.replace(
+            /^(\d{2})\.(\d{3})(\d)/,
+            "$1.$2.$3"
+          );
+
+
+        valor =
+          valor.replace(
+            /\.(\d{3})(\d)/,
+            ".$1/$2"
+          );
+
+
+        valor =
+          valor.replace(
+            /(\d{4})(\d)/,
+            "$1-$2"
+          );
+
+      }
+
+
+      cnpj.value =
+        valor;
+
+    }
+  );
+
+
+  /* =======================================================
+     UF
+  ======================================================= */
+
+  const uf =
+    document.getElementById(
+      "uf"
+    );
+
+
+  uf.addEventListener(
+    "input",
+    () => {
+
+      uf.value =
+        uf.value
+          .replace(
+            /[^a-zA-Z]/g,
+            ""
+          )
+          .toUpperCase()
+          .slice(
+            0,
+            2
+          );
+
+    }
+  );
+
+
+  /* =======================================================
+     OBSERVAÇÕES
+  ======================================================= */
+
+  observacoes.addEventListener(
+    "input",
+    () => {
+
+      contadorObservacoes.textContent =
+        observacoes.value.length;
+
+    }
+  );
+
+
+  /* =======================================================
+     PRODUTOS
+  ======================================================= */
+
+  let contadorProdutos = 1;
+
+
+  function configurarProduto(
+    produtoItem
+  ) {
+
+    const quantidade =
+      produtoItem.querySelector(
+        ".produto-quantidade"
+      );
+
+
+    const valorLoja =
+      produtoItem.querySelector(
+        ".produto-valor-loja"
+      );
+
+
+    const precoSugerido =
+      produtoItem.querySelector(
+        ".produto-preco-sugerido"
+      );
+
+
+    quantidade.addEventListener(
+      "input",
+      calcularTotais
+    );
+
+
+    valorLoja.addEventListener(
+      "input",
+      () => {
+
+        formatarCampoMoeda(
+          valorLoja
+        );
+
+      }
+    );
+
+
+    precoSugerido.addEventListener(
+      "input",
+      () => {
+
+        formatarCampoMoeda(
+          precoSugerido
+        );
+
+      }
+    );
+
   }
 
-  .resumo-produtos {
-    grid-template-columns: 1fr;
+
+  /* =======================================================
+     CRIAR NOVO PRODUTO
+  ======================================================= */
+
+  function criarProduto() {
+
+    contadorProdutos++;
+
+
+    const numero =
+      String(
+        contadorProdutos
+      ).padStart(
+        2,
+        "0"
+      );
+
+
+    const div =
+      document.createElement(
+        "div"
+      );
+
+
+    div.className =
+      "produto-item";
+
+
+    div.dataset.produto =
+      contadorProdutos;
+
+
+    div.innerHTML = `
+
+      <div class="produto-topo">
+
+        <strong>
+          Produto ${numero}
+        </strong>
+
+        <button
+          type="button"
+          class="btn-remover-produto"
+          aria-label="Remover produto"
+        >
+          ✕
+        </button>
+
+      </div>
+
+
+      <div class="campo">
+
+        <label>
+          Produto / Modelo *
+        </label>
+
+        <input
+          type="text"
+          class="produto-nome"
+          placeholder="Nome do produto"
+          required
+        >
+
+      </div>
+
+
+      <div class="grid grid-3">
+
+        <div class="campo">
+
+          <label>
+            Quantidade *
+          </label>
+
+          <input
+            type="number"
+            class="produto-quantidade"
+            min="1"
+            step="1"
+            value="1"
+            inputmode="numeric"
+            required
+          >
+
+        </div>
+
+
+        <div class="campo">
+
+          <label>
+            Valor para loja *
+          </label>
+
+          <div class="input-moeda">
+
+            <span>R$</span>
+
+            <input
+              type="text"
+              class="produto-valor-loja moeda"
+              inputmode="decimal"
+              placeholder="0,00"
+              required
+            >
+
+          </div>
+
+        </div>
+
+
+        <div class="campo">
+
+          <label>
+            Preço sugerido
+          </label>
+
+          <div class="input-moeda">
+
+            <span>R$</span>
+
+            <input
+              type="text"
+              class="produto-preco-sugerido moeda"
+              inputmode="decimal"
+              placeholder="0,00"
+            >
+
+          </div>
+
+        </div>
+
+      </div>
+
+
+      <div class="produto-subtotal">
+
+        <span>
+          Subtotal consignado
+        </span>
+
+        <strong class="subtotal">
+          R$ 0,00
+        </strong>
+
+      </div>
+
+    `;
+
+
+    listaProdutos.appendChild(
+      div
+    );
+
+
+    configurarProduto(
+      div
+    );
+
+
+    const btnRemover =
+      div.querySelector(
+        ".btn-remover-produto"
+      );
+
+
+    btnRemover.addEventListener(
+      "click",
+      () => {
+
+        div.remove();
+
+        renumerarProdutos();
+
+        calcularTotais();
+
+      }
+    );
+
+
+    calcularTotais();
+
   }
 
-  .acoes {
-    flex-direction: column-reverse;
+
+  /* =======================================================
+     RENUMERAR PRODUTOS
+  ======================================================= */
+
+  function renumerarProdutos() {
+
+    const produtos =
+      listaProdutos.querySelectorAll(
+        ".produto-item"
+      );
+
+
+    produtos.forEach(
+      (produto, index) => {
+
+        const titulo =
+          produto.querySelector(
+            ".produto-topo strong"
+          );
+
+
+        if (titulo) {
+
+          titulo.textContent =
+            `Produto ${String(
+              index + 1
+            ).padStart(
+              2,
+              "0"
+            )}`;
+
+        }
+
+      }
+    );
+
   }
 
-  .acoes .btn {
-    width: 100%;
+
+  btnAdicionarProduto.addEventListener(
+    "click",
+    criarProduto
+  );
+
+
+  /* =======================================================
+     CÁLCULOS
+  ======================================================= */
+
+  function calcularTotais() {
+
+    const produtos =
+      listaProdutos.querySelectorAll(
+        ".produto-item"
+      );
+
+
+    let unidades = 0;
+
+    let total = 0;
+
+
+    produtos.forEach(
+      produto => {
+
+        const quantidade =
+          Number(
+            produto.querySelector(
+              ".produto-quantidade"
+            ).value
+          ) || 0;
+
+
+        const valor =
+          valorParaNumero(
+            produto.querySelector(
+              ".produto-valor-loja"
+            ).value
+          );
+
+
+        const subtotal =
+          quantidade * valor;
+
+
+        unidades +=
+          quantidade;
+
+
+        total +=
+          subtotal;
+
+
+        const subtotalElemento =
+          produto.querySelector(
+            ".subtotal"
+          );
+
+
+        subtotalElemento.textContent =
+          numeroParaMoeda(
+            subtotal
+          );
+
+      }
+    );
+
+
+    totalUnidades.textContent =
+      unidades;
+
+
+    valorTotal.textContent =
+      numeroParaMoeda(
+        total
+      );
+
   }
 
-  .preview-cabecalho {
-    align-items: flex-start;
+
+  /* =======================================================
+     DATA BRASILEIRA
+  ======================================================= */
+
+  function formatarDataBR(
+    dataISO
+  ) {
+
+    if (!dataISO) {
+
+      return "—";
+
+    }
+
+
+    const partes =
+      dataISO.split("-");
+
+
+    if (
+      partes.length !== 3
+    ) {
+
+      return dataISO;
+
+    }
+
+
+    return (
+      `${partes[2]}/` +
+      `${partes[1]}/` +
+      `${partes[0]}`
+    );
+
   }
 
-  .documento-a4 {
-    transform-origin: top left;
-  }
-}
 
+  /* =======================================================
+     PREENCHER DOCUMENTO
+  ======================================================= */
 
-@media (max-width: 720px) {
+  function preencherDocumento() {
 
-  .preview-container {
-    overflow-x: auto;
+    const loja =
+      document
+        .getElementById("loja")
+        .value
+        .trim();
 
-    margin-left: -14px;
-    margin-right: -14px;
 
-    padding-left: 14px;
-    padding-right: 14px;
-  }
+    const responsavel =
+      document
+        .getElementById("responsavel")
+        .value
+        .trim();
 
-  .preview-cabecalho {
-    min-width: 680px;
-  }
 
-  .documento-a4 {
-    width: 210mm;
-    min-height: 297mm;
-  }
+    const email =
+      document
+        .getElementById("email")
+        .value
+        .trim();
 
-  .acoes-documento {
-    min-width: 680px;
 
-    justify-content: flex-start;
-  }
+    const cidade =
+      document
+        .getElementById("cidade")
+        .value
+        .trim();
 
-  .aviso-compartilhamento {
-    min-width: 680px;
-    text-align: left;
-  }
-}
 
+    const periodicidade =
+      document
+        .getElementById("periodicidade")
+        .value;
 
-@media (max-width: 520px) {
 
-  .topo {
-    min-height: 64px;
-  }
+    const pagamento =
+      document
+        .getElementById("formaPagamento")
+        .value;
 
-  .marca-simbolo {
-    width: 38px;
-    height: 38px;
 
-    border-radius: 11px;
-  }
+    document.getElementById(
+      "docNumero"
+    ).textContent =
+      numeroConsignacao.value ||
+      "—";
 
-  .marca-texto strong {
-    font-size: 20px;
-  }
 
-  .marca-texto span {
-    font-size: 14px;
-  }
+    document.getElementById(
+      "docData"
+    ).textContent =
+      formatarDataBR(
+        dataConsignacao.value
+      );
 
-  .hero {
-    border-radius: 18px;
-  }
 
-  .hero h1 {
-    font-size: 30px;
-  }
+    document.getElementById(
+      "docLoja"
+    ).textContent =
+      loja || "—";
 
-  .hero > p {
-    font-size: 13px;
-  }
 
-  .privacidade {
-    padding: 12px;
-  }
+    document.getElementById(
+      "docCnpj"
+    ).textContent =
+      cnpj.value.trim() ||
+      "—";
 
-  .card {
-    border-radius: 15px;
-  }
 
-  .card-cabecalho {
-    align-items: flex-start;
-  }
+    document.getElementById(
+      "docResponsavel"
+    ).textContent =
+      responsavel ||
+      "—";
 
-  .numero-secao {
-    min-width: 36px;
-    height: 36px;
-  }
 
-  .produto-item {
-    padding: 14px;
-  }
+    document.getElementById(
+      "docTelefone"
+    ).textContent =
+      telefone.value.trim() ||
+      "—";
 
-  .preview-cabecalho {
-    flex-direction: column;
-  }
 
-  .acoes-documento {
-    flex-direction: column;
-  }
+    document.getElementById(
+      "docEmail"
+    ).textContent =
+      email || "—";
 
-  .acoes-documento .btn {
-    width: 100%;
-  }
-}
 
+    const cidadeUf = [
+      cidade,
+      uf.value.trim()
+    ]
+      .filter(Boolean)
+      .join(" / ");
 
-/* =========================================================
-   IMPRESSÃO / PDF
-========================================================= */
 
-@page {
-  size: A4;
-  margin: 0;
-}
+    document.getElementById(
+      "docCidade"
+    ).textContent =
+      cidadeUf || "—";
 
-@media print {
 
-  html,
-  body {
-    width: 210mm;
-    min-height: 297mm;
+    document.getElementById(
+      "docPeriodicidade"
+    ).textContent =
+      periodicidade ||
+      "A combinar";
 
-    background: white !important;
-  }
 
-  body {
-    margin: 0;
-    padding: 0;
-  }
-
-  .topo,
-  .hero,
-  #formConsignacao,
-  .preview-cabecalho,
-  .acoes-documento,
-  .aviso-compartilhamento,
-  .rodape-site,
-  .modal {
-    display: none !important;
-  }
-
-  .container {
-    width: 210mm;
-
-    margin: 0;
-    padding: 0;
-  }
-
-  .preview-container {
-    display: block !important;
-
-    margin: 0;
-    padding: 0;
-
-    border: 0;
-
-    overflow: visible;
-  }
-
-  .documento-a4 {
-    width: 210mm;
-    height: 297mm;
-    min-height: 297mm;
-
-    margin: 0;
-
-    box-shadow: none;
-
-    page-break-after: avoid;
-    page-break-inside: avoid;
-
-    -webkit-print-color-adjust: exact !important;
-    print-color-adjust: exact !important;
-  }
-}
-
-
-.btn-remover-produto {
-  width: 32px;
-  height: 32px;
-
-  display: grid;
-  place-items: center;
-
-  border: 1px solid #f0c9c5;
-  border-radius: 9px;
-
-  background: #fff5f4;
-  color: #b42318;
-
-  font-size: 13px;
-  font-weight: 800;
-
-  transition: 0.18s ease;
-}
-
-.btn-remover-produto:hover {
-  background: #fee4e2;
-  border-color: #e59b94;
-}
-/* =========================================================
-   LOGO LINKA GIFT
-========================================================= */
-
-.logo-topo {
-  display: block;
-  width: auto;
-  height: 48px;
-  max-width: 220px;
-  object-fit: contain;
-}
-
-@media (max-width: 520px) {
-  .logo-topo {
-    height: 42px;
-    max-width: 190px;
-  }
-}
-
-/* =========================================================
-   ASSINATURAS DIGITAIS
-========================================================= */
-
-.assinaturas-digitais-grid {
-  display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 16px;
-  margin: 20px 0;
-}
-
-.assinatura-digital-box {
-  padding: 18px;
-  border: 1px solid #dfe5eb;
-  border-radius: 14px;
-  background: #f8fafc;
-}
-
-.assinatura-digital-cabecalho {
-  display: flex;
-  align-items: flex-start;
-  justify-content: space-between;
-  gap: 12px;
-  margin-bottom: 14px;
-}
-
-.assinatura-digital-box h3 {
-  margin-bottom: 5px;
-  color: var(--azul);
-  font-size: 14px;
-}
-
-.assinatura-digital-box p {
-  color: #667085;
-  font-size: 11px;
-  line-height: 1.45;
-}
-
-.assinatura-status {
-  flex-shrink: 0;
-  padding: 5px 8px;
-  border: 1px solid #d8e0e8;
-  border-radius: 999px;
-  background: #ffffff;
-  color: #667085;
-  font-size: 9px;
-  font-weight: 800;
-  text-transform: uppercase;
-  letter-spacing: 0.35px;
-}
-
-.assinatura-status.assinado {
-  border-color: #b8ddce;
-  background: #edf8f3;
-  color: #167052;
-}
-
-.assinatura-canvas-wrapper {
-  position: relative;
-  width: 100%;
-  height: 180px;
-  overflow: hidden;
-  border: 2px dashed #b9c4cf;
-  border-radius: 12px;
-  background: #ffffff;
-  touch-action: none;
-  user-select: none;
-}
-
-.canvas-assinatura {
-  position: relative;
-  z-index: 2;
-  display: block;
-  width: 100%;
-  height: 100%;
-  cursor: crosshair;
-  touch-action: none;
-}
-
-.linha-guia-assinatura {
-  position: absolute;
-  z-index: 1;
-  left: 8%;
-  right: 8%;
-  bottom: 28px;
-  padding-top: 5px;
-  border-top: 1px solid #cfd6de;
-  color: #98a2b3;
-  font-size: 10px;
-  text-align: center;
-  pointer-events: none;
-}
-
-.assinatura-acoes {
-  display: flex;
-  justify-content: flex-end;
-  margin-top: 10px;
-}
-
-.btn-limpar-assinatura {
-  min-height: 36px;
-  padding: 0 13px;
-  border: 1px solid #d7dee6;
-  border-radius: 9px;
-  background: #ffffff;
-  color: #475467;
-  font-size: 11px;
-  font-weight: 700;
-}
-
-.btn-limpar-assinatura:hover {
-  background: #f2f4f7;
-}
-
-.area-assinatura-doc {
-  height: 18mm;
-  display: flex;
-  align-items: flex-end;
-  justify-content: center;
-  overflow: hidden;
-}
-
-.imagem-assinatura-doc {
-  display: none;
-  max-width: 60mm;
-  max-height: 17mm;
-  object-fit: contain;
-}
-
-.imagem-assinatura-doc.ativa {
-  display: block;
-}
-
-.doc-local-data strong {
-  font-size: 6.7pt;
-  color: var(--azul);
-}
-
-@media (max-width: 850px) {
-  .assinaturas-digitais-grid {
-    grid-template-columns: 1fr;
-  }
-}
-
-@media (max-width: 520px) {
-  .assinatura-canvas-wrapper {
-    height: 165px;
+    document.getElementById(
+      "docPagamento"
+    ).textContent =
+      pagamento ||
+      "A combinar";
+
+
+    const assinaturaLojaNome =
+      document.getElementById(
+        "docAssinaturaLoja"
+      );
+
+
+    if (assinaturaLojaNome) {
+
+      assinaturaLojaNome.textContent =
+        responsavel ||
+        "ESTABELECIMENTO";
+
+    }
+
+
+    const docLocal =
+      document.getElementById(
+        "docLocal"
+      );
+
+
+    if (docLocal) {
+
+      docLocal.textContent =
+        cidadeUf || "—";
+
+    }
+
+
+    const docDataAssinatura =
+      document.getElementById(
+        "docDataAssinatura"
+      );
+
+
+    if (docDataAssinatura) {
+
+      docDataAssinatura.textContent =
+        formatarDataBR(
+          dataConsignacao.value
+        );
+
+    }
+
+
+    preencherProdutosDocumento();
+
+
+    const obsBox =
+      document.getElementById(
+        "docObservacoesBox"
+      );
+
+
+    const docObservacoes =
+      document.getElementById(
+        "docObservacoes"
+      );
+
+
+    if (
+      observacoes.value.trim()
+    ) {
+
+      docObservacoes.textContent =
+        observacoes.value.trim();
+
+
+      obsBox.classList.remove(
+        "oculto"
+      );
+
+    } else {
+
+      docObservacoes.textContent =
+        "";
+
+
+      obsBox.classList.add(
+        "oculto"
+      );
+
+    }
+
+
+    /* ASSINATURAS NO DOCUMENTO */
+
+    assinaturaLinka
+      .atualizarDocumento();
+
+
+    assinaturaLoja
+      .atualizarDocumento();
+
   }
 
-  .assinatura-digital-cabecalho {
-    flex-direction: column;
+
+  /* =======================================================
+     PRODUTOS NO DOCUMENTO
+  ======================================================= */
+
+  function preencherProdutosDocumento() {
+
+    const tbody =
+      document.getElementById(
+        "docProdutos"
+      );
+
+
+    tbody.innerHTML = "";
+
+
+    const produtos =
+      listaProdutos.querySelectorAll(
+        ".produto-item"
+      );
+
+
+    let unidades = 0;
+
+    let total = 0;
+
+
+    produtos.forEach(
+      produto => {
+
+        const nome =
+          produto.querySelector(
+            ".produto-nome"
+          ).value.trim();
+
+
+        const quantidade =
+          Number(
+            produto.querySelector(
+              ".produto-quantidade"
+            ).value
+          ) || 0;
+
+
+        const valorLoja =
+          valorParaNumero(
+            produto.querySelector(
+              ".produto-valor-loja"
+            ).value
+          );
+
+
+        const precoSugerido =
+          valorParaNumero(
+            produto.querySelector(
+              ".produto-preco-sugerido"
+            ).value
+          );
+
+
+        if (!nome) {
+
+          return;
+
+        }
+
+
+        unidades +=
+          quantidade;
+
+
+        total +=
+          quantidade *
+          valorLoja;
+
+
+        const linha =
+          document.createElement(
+            "tr"
+          );
+
+
+        linha.innerHTML = `
+
+          <td>
+            ${escaparHTML(nome)}
+          </td>
+
+          <td>
+            ${quantidade}
+          </td>
+
+          <td>
+            ${numeroParaMoeda(valorLoja)}
+          </td>
+
+          <td>
+            ${
+              precoSugerido > 0
+                ? numeroParaMoeda(
+                    precoSugerido
+                  )
+                : "—"
+            }
+          </td>
+
+        `;
+
+
+        tbody.appendChild(
+          linha
+        );
+
+      }
+    );
+
+
+    document.getElementById(
+      "docTotalUnidades"
+    ).textContent =
+      unidades;
+
+
+    document.getElementById(
+      "docValorTotal"
+    ).textContent =
+      numeroParaMoeda(
+        total
+      );
+
   }
-}
+
+
+  /* =======================================================
+     PROTEÇÃO HTML
+  ======================================================= */
+
+  function escaparHTML(
+    texto
+  ) {
+
+    return String(texto)
+      .replace(
+        /&/g,
+        "&amp;"
+      )
+      .replace(
+        /</g,
+        "&lt;"
+      )
+      .replace(
+        />/g,
+        "&gt;"
+      )
+      .replace(
+        /"/g,
+        "&quot;"
+      )
+      .replace(
+        /'/g,
+        "&#039;"
+      );
+
+  }
+
+
+  /* =======================================================
+     VALIDAÇÃO
+  ======================================================= */
+
+  function validarFormulario() {
+
+    if (
+      !form.checkValidity()
+    ) {
+
+      form.reportValidity();
+
+
+      mostrarModal(
+        "Preencha os campos obrigatórios",
+        "Verifique os campos marcados com * antes de gerar o termo.",
+        "!"
+      );
+
+
+      return false;
+
+    }
+
+
+    if (
+      !confirmacao.checked
+    ) {
+
+      mostrarModal(
+        "Confirmação necessária",
+        "Marque a opção de conferência dos dados antes de gerar o termo.",
+        "!"
+      );
+
+
+      return false;
+
+    }
+
+
+    const produtos =
+      listaProdutos.querySelectorAll(
+        ".produto-item"
+      );
+
+
+    let produtoValido =
+      false;
+
+
+    produtos.forEach(
+      produto => {
+
+        const nome =
+          produto.querySelector(
+            ".produto-nome"
+          ).value.trim();
+
+
+        const quantidade =
+          Number(
+            produto.querySelector(
+              ".produto-quantidade"
+            ).value
+          );
+
+
+        const valor =
+          valorParaNumero(
+            produto.querySelector(
+              ".produto-valor-loja"
+            ).value
+          );
+
+
+        if (
+          nome &&
+          quantidade > 0 &&
+          valor > 0
+        ) {
+
+          produtoValido =
+            true;
+
+        }
+
+      }
+    );
+
+
+    if (
+      !produtoValido
+    ) {
+
+      mostrarModal(
+        "Produto inválido",
+        "Informe ao menos um produto com quantidade e valor para a loja maiores que zero.",
+        "!"
+      );
+
+
+      return false;
+
+    }
+
+
+    /* -------------------------------------------------------
+       ASSINATURA LINKA
+    ------------------------------------------------------- */
+
+    if (
+      !assinaturaLinka.foiAssinada()
+    ) {
+
+      mostrarModal(
+        "Assinatura da LINKA Gift necessária",
+        "Assine o termo no campo da LINKA Gift antes de gerar o documento.",
+        "✍"
+      );
+
+
+      canvasAssinaturaLinka
+        .scrollIntoView({
+
+          behavior: "smooth",
+
+          block: "center"
+
+        });
+
+
+      return false;
+
+    }
+
+
+    /* -------------------------------------------------------
+       ASSINATURA LOJA
+    ------------------------------------------------------- */
+
+    if (
+      !assinaturaLoja.foiAssinada()
+    ) {
+
+      mostrarModal(
+        "Assinatura do estabelecimento necessária",
+        "Peça ao responsável da loja para assinar com o dedo antes de gerar o documento.",
+        "✍"
+      );
+
+
+      canvasAssinaturaLoja
+        .scrollIntoView({
+
+          behavior: "smooth",
+
+          block: "center"
+
+        });
+
+
+      return false;
+
+    }
+
+
+    return true;
+
+  }
+
+
+  /* =======================================================
+     GERAR DOCUMENTO
+  ======================================================= */
+
+  form.addEventListener(
+    "submit",
+    event => {
+
+      event.preventDefault();
+
+
+      if (
+        !validarFormulario()
+      ) {
+
+        return;
+
+      }
+
+
+      calcularTotais();
+
+
+      preencherDocumento();
+
+
+      areaPreview.classList.remove(
+        "oculto"
+      );
+
+
+      setTimeout(
+        () => {
+
+          areaPreview
+            .scrollIntoView({
+
+              behavior: "smooth",
+
+              block: "start"
+
+            });
+
+        },
+        100
+      );
+
+    }
+  );
+
+
+  /* =======================================================
+     EDITAR
+  ======================================================= */
+
+  btnEditar.addEventListener(
+    "click",
+    () => {
+
+      areaPreview.classList.add(
+        "oculto"
+      );
+
+
+      form.scrollIntoView({
+
+        behavior: "smooth",
+
+        block: "start"
+
+      });
+
+    }
+  );
+
+
+  /* =======================================================
+     LIMPAR FORMULÁRIO
+  ======================================================= */
+
+  btnLimpar.addEventListener(
+    "click",
+    () => {
+
+      const confirmar =
+        window.confirm(
+          "Deseja realmente limpar todos os dados preenchidos?"
+        );
+
+
+      if (
+        !confirmar
+      ) {
+
+        return;
+
+      }
+
+
+      form.reset();
+
+
+      const produtos =
+        listaProdutos.querySelectorAll(
+          ".produto-item"
+        );
+
+
+      produtos.forEach(
+        (produto, index) => {
+
+          if (
+            index > 0
+          ) {
+
+            produto.remove();
+
+          }
+
+        }
+      );
+
+
+      contadorProdutos = 1;
+
+
+      const primeiroProduto =
+        listaProdutos.querySelector(
+          ".produto-item"
+        );
+
+
+      primeiroProduto
+        .querySelector(
+          ".produto-nome"
+        )
+        .value =
+          "Medalhão de Identificação Pet NFC";
+
+
+      primeiroProduto
+        .querySelector(
+          ".produto-quantidade"
+        )
+        .value =
+          "1";
+
+
+      primeiroProduto
+        .querySelector(
+          ".produto-valor-loja"
+        )
+        .value =
+          "";
+
+
+      primeiroProduto
+        .querySelector(
+          ".produto-preco-sugerido"
+        )
+        .value =
+          "";
+
+
+      contadorObservacoes
+        .textContent =
+          "0";
+
+
+      /* LIMPAR ASSINATURAS */
+
+      assinaturaLinka.limpar();
+
+      assinaturaLoja.limpar();
+
+
+      areaPreview.classList.add(
+        "oculto"
+      );
+
+
+      definirDataAtual();
+
+
+      gerarNumeroConsignacao();
+
+
+      calcularTotais();
+
+
+      window.scrollTo({
+
+        top: 0,
+
+        behavior: "smooth"
+
+      });
+
+    }
+  );
+
+
+  /* =======================================================
+     IMPRIMIR
+  ======================================================= */
+
+  btnImprimir.addEventListener(
+    "click",
+    () => {
+
+      window.print();
+
+    }
+  );
+
+
+  /* =======================================================
+     SALVAR PDF
+  ======================================================= */
+
+  btnPDF.addEventListener(
+    "click",
+    () => {
+
+      mostrarModal(
+        "Salvar em PDF",
+        "Na janela de impressão, escolha a opção “Salvar como PDF” ou equivalente no seu dispositivo.",
+        "PDF"
+      );
+
+
+      setTimeout(
+        () => {
+
+          fecharModal();
+
+          window.print();
+
+        },
+        700
+      );
+
+    }
+  );
+
+
+  /* =======================================================
+     TEXTO PARA COMPARTILHAR
+  ======================================================= */
+
+  function montarTextoCompartilhamento() {
+
+    const loja =
+      document
+        .getElementById("loja")
+        .value
+        .trim();
+
+
+    const responsavel =
+      document
+        .getElementById("responsavel")
+        .value
+        .trim();
+
+
+    let texto = "";
+
+
+    texto +=
+      "LINKA Gift - Termo de Consignação\n\n";
+
+
+    texto +=
+      `Nº: ${numeroConsignacao.value}\n`;
+
+
+    texto +=
+      `Data: ${formatarDataBR(
+        dataConsignacao.value
+      )}\n`;
+
+
+    texto +=
+      `Estabelecimento: ${loja}\n`;
+
+
+    texto +=
+      `Responsável: ${responsavel}\n`;
+
+
+    texto +=
+      `Total de unidades: ${
+        document.getElementById(
+          "docTotalUnidades"
+        ).textContent
+      }\n`;
+
+
+    texto +=
+      `Valor total consignado: ${
+        document.getElementById(
+          "docValorTotal"
+        ).textContent
+      }\n\n`;
+
+
+    texto +=
+      "Termo conferido e assinado pelas partes.";
+
+
+    return texto;
+
+  }
+
+
+  /* =======================================================
+     COMPARTILHAR
+  ======================================================= */
+
+  btnCompartilhar.addEventListener(
+    "click",
+    async () => {
+
+      preencherDocumento();
+
+
+      const titulo =
+        `Consignação ${
+          numeroConsignacao.value
+        }`;
+
+
+      const texto =
+        montarTextoCompartilhamento();
+
+
+      if (
+        navigator.share
+      ) {
+
+        try {
+
+          await navigator.share({
+
+            title: titulo,
+
+            text: texto
+
+          });
+
+        } catch (erro) {
+
+          if (
+            erro.name !==
+            "AbortError"
+          ) {
+
+            mostrarModal(
+              "Não foi possível compartilhar",
+              "Use o botão Salvar em PDF e compartilhe o arquivo pelo WhatsApp ou e-mail.",
+              "!"
+            );
+
+          }
+
+        }
+
+      } else {
+
+        try {
+
+          await navigator.clipboard
+            .writeText(
+              texto
+            );
+
+
+          mostrarModal(
+            "Texto copiado",
+            "O resumo da consignação foi copiado. Você pode colá-lo no WhatsApp ou e-mail.",
+            "✓"
+          );
+
+        } catch {
+
+          mostrarModal(
+            "Compartilhamento indisponível",
+            "Use o botão Salvar em PDF e compartilhe o documento pelo WhatsApp ou e-mail.",
+            "!"
+          );
+
+        }
+
+      }
+
+    }
+  );
+
+
+  /* =======================================================
+     CONFIGURAR PRODUTO INICIAL
+  ======================================================= */
+
+  document
+    .querySelectorAll(
+      ".produto-item"
+    )
+    .forEach(
+      configurarProduto
+    );
+
+
+  /* =======================================================
+     RECALCULAR
+  ======================================================= */
+
+  listaProdutos.addEventListener(
+    "change",
+    calcularTotais
+  );
+
+
+  /* =======================================================
+     INICIALIZAÇÃO
+  ======================================================= */
+
+  definirDataAtual();
+
+
+  gerarNumeroConsignacao();
+
+
+  calcularTotais();
+
+
+  /* AJUSTAR CANVAS */
+
+  assinaturaLinka
+    .ajustarCanvas(
+      false
+    );
+
+
+  assinaturaLoja
+    .ajustarCanvas(
+      false
+    );
+
+
+  /* =======================================================
+     REDIMENSIONAMENTO DA TELA
+  ======================================================= */
+
+  let resizeTimer;
+
+
+  window.addEventListener(
+    "resize",
+    () => {
+
+      clearTimeout(
+        resizeTimer
+      );
+
+
+      resizeTimer =
+        setTimeout(
+          () => {
+
+            assinaturaLinka
+              .ajustarCanvas(
+                true
+              );
+
+
+            assinaturaLoja
+              .ajustarCanvas(
+                true
+              );
+
+          },
+          150
+        );
+
+    }
+  );
+
+});
