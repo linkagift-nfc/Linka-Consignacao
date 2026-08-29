@@ -1970,3 +1970,21 @@ img {
   background: #fee4e2;
   border-color: #e59b94;
 }
+/* =========================================================
+   LOGO LINKA GIFT
+========================================================= */
+
+.logo-topo {
+  display: block;
+  width: auto;
+  height: 48px;
+  max-width: 220px;
+  object-fit: contain;
+}
+
+@media (max-width: 520px) {
+  .logo-topo {
+    height: 42px;
+    max-width: 190px;
+  }
+}
