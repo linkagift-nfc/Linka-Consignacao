@@ -1946,3 +1946,27 @@ img {
   }
 }
 
+
+.btn-remover-produto {
+  width: 32px;
+  height: 32px;
+
+  display: grid;
+  place-items: center;
+
+  border: 1px solid #f0c9c5;
+  border-radius: 9px;
+
+  background: #fff5f4;
+  color: #b42318;
+
+  font-size: 13px;
+  font-weight: 800;
+
+  transition: 0.18s ease;
+}
+
+.btn-remover-produto:hover {
+  background: #fee4e2;
+  border-color: #e59b94;
+}
