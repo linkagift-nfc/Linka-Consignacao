@@ -1,0 +1,1081 @@
+
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+  <meta charset="UTF-8">
+
+  <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0, viewport-fit=cover"
+  >
+
+  <meta
+    name="description"
+    content="Gerador de Termo de Consignação - LINKA Gift"
+  >
+
+  <meta name="theme-color" content="#10233f">
+
+  <title>Consignação | LINKA Gift</title>
+
+  <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+  <!-- =====================================================
+       TOPO
+  ====================================================== -->
+
+  <header class="topo">
+
+    <div class="marca">
+
+      <div class="marca-simbolo">
+        <span>LG</span>
+      </div>
+
+      <div class="marca-texto">
+        <strong>LINKA</strong>
+        <span>Gift</span>
+      </div>
+
+    </div>
+
+    <div class="topo-info">
+      <span class="status-local">
+        ● Dados processados neste dispositivo
+      </span>
+    </div>
+
+  </header>
+
+
+  <!-- =====================================================
+       CONTEÚDO PRINCIPAL
+  ====================================================== -->
+
+  <main class="container">
+
+    <!-- APRESENTAÇÃO -->
+
+    <section class="hero">
+
+      <div class="hero-etiqueta">
+        CONTROLE DE CONSIGNAÇÃO
+      </div>
+
+      <h1>
+        Termo de Entrega
+        <span>em Consignação</span>
+      </h1>
+
+      <p>
+        Preencha os dados abaixo para gerar um termo profissional
+        de entrega de produtos em consignação.
+      </p>
+
+      <div class="privacidade">
+
+        <span class="privacidade-icone">🔒</span>
+
+        <div>
+          <strong>Preenchimento local</strong>
+          <small>
+            Os dados informados nesta página não são armazenados
+            em banco de dados por este gerador.
+          </small>
+        </div>
+
+      </div>
+
+    </section>
+
+
+    <!-- =====================================================
+         FORMULÁRIO
+    ====================================================== -->
+
+    <form id="formConsignacao" autocomplete="off">
+
+      <!-- IDENTIFICAÇÃO -->
+
+      <section class="card">
+
+        <div class="card-cabecalho">
+
+          <div class="numero-secao">01</div>
+
+          <div>
+            <h2>Identificação</h2>
+            <p>Informações do termo</p>
+          </div>
+
+        </div>
+
+        <div class="grid grid-2">
+
+          <div class="campo">
+            <label for="numeroConsignacao">
+              Nº da consignação
+            </label>
+
+            <input
+              type="text"
+              id="numeroConsignacao"
+              readonly
+            >
+          </div>
+
+          <div class="campo">
+            <label for="dataConsignacao">
+              Data
+            </label>
+
+            <input
+              type="date"
+              id="dataConsignacao"
+              required
+            >
+          </div>
+
+        </div>
+
+      </section>
+
+
+      <!-- ESTABELECIMENTO -->
+
+      <section class="card">
+
+        <div class="card-cabecalho">
+
+          <div class="numero-secao">02</div>
+
+          <div>
+            <h2>Estabelecimento</h2>
+            <p>Dados da loja que receberá os produtos</p>
+          </div>
+
+        </div>
+
+
+        <div class="grid">
+
+          <div class="campo">
+            <label for="loja">
+              Loja / Razão Social *
+            </label>
+
+            <input
+              type="text"
+              id="loja"
+              placeholder="Ex.: Mundo Pet"
+              required
+            >
+          </div>
+
+
+          <div class="grid grid-2">
+
+            <div class="campo">
+              <label for="cnpj">
+                CNPJ / CPF
+              </label>
+
+              <input
+                type="text"
+                id="cnpj"
+                inputmode="numeric"
+                placeholder="00.000.000/0000-00"
+              >
+            </div>
+
+            <div class="campo">
+              <label for="responsavel">
+                Responsável pelo recebimento *
+              </label>
+
+              <input
+                type="text"
+                id="responsavel"
+                placeholder="Nome completo"
+                required
+              >
+            </div>
+
+          </div>
+
+
+          <div class="grid grid-2">
+
+            <div class="campo">
+              <label for="telefone">
+                Telefone / WhatsApp
+              </label>
+
+              <input
+                type="tel"
+                id="telefone"
+                placeholder="(00) 00000-0000"
+              >
+            </div>
+
+            <div class="campo">
+              <label for="email">
+                E-mail
+              </label>
+
+              <input
+                type="email"
+                id="email"
+                placeholder="contato@petshop.com.br"
+              >
+            </div>
+
+          </div>
+
+
+          <div class="grid grid-2">
+
+            <div class="campo">
+              <label for="cidade">
+                Cidade
+              </label>
+
+              <input
+                type="text"
+                id="cidade"
+                placeholder="Cidade"
+              >
+            </div>
+
+            <div class="campo">
+              <label for="uf">
+                UF
+              </label>
+
+              <input
+                type="text"
+                id="uf"
+                maxlength="2"
+                placeholder="SC"
+                class="uppercase"
+              >
+            </div>
+
+          </div>
+
+        </div>
+
+      </section>
+
+
+      <!-- PRODUTOS -->
+
+      <section class="card">
+
+        <div class="card-cabecalho">
+
+          <div class="numero-secao">03</div>
+
+          <div>
+            <h2>Produtos</h2>
+            <p>Informe os itens deixados em consignação</p>
+          </div>
+
+        </div>
+
+
+        <div id="listaProdutos">
+
+          <!-- PRODUTO 1 -->
+
+          <div class="produto-item" data-produto="1">
+
+            <div class="produto-topo">
+
+              <strong>Produto 01</strong>
+
+            </div>
+
+
+            <div class="campo">
+
+              <label for="produto1">
+                Produto / Modelo *
+              </label>
+
+              <input
+                type="text"
+                id="produto1"
+                class="produto-nome"
+                value="Medalhão de Identificação Pet NFC"
+                required
+              >
+
+            </div>
+
+
+            <div class="grid grid-3">
+
+              <div class="campo">
+
+                <label for="quantidade1">
+                  Quantidade *
+                </label>
+
+                <input
+                  type="number"
+                  id="quantidade1"
+                  class="produto-quantidade"
+                  min="1"
+                  step="1"
+                  value="1"
+                  inputmode="numeric"
+                  required
+                >
+
+              </div>
+
+
+              <div class="campo">
+
+                <label for="valorLoja1">
+                  Valor para loja *
+                </label>
+
+                <div class="input-moeda">
+
+                  <span>R$</span>
+
+                  <input
+                    type="text"
+                    id="valorLoja1"
+                    class="produto-valor-loja moeda"
+                    inputmode="decimal"
+                    placeholder="0,00"
+                    required
+                  >
+
+                </div>
+
+              </div>
+
+
+              <div class="campo">
+
+                <label for="precoSugerido1">
+                  Preço sugerido
+                </label>
+
+                <div class="input-moeda">
+
+                  <span>R$</span>
+
+                  <input
+                    type="text"
+                    id="precoSugerido1"
+                    class="produto-preco-sugerido moeda"
+                    inputmode="decimal"
+                    placeholder="0,00"
+                  >
+
+                </div>
+
+              </div>
+
+            </div>
+
+
+            <div class="produto-subtotal">
+
+              <span>Subtotal consignado</span>
+
+              <strong class="subtotal">
+                R$ 0,00
+              </strong>
+
+            </div>
+
+          </div>
+
+        </div>
+
+
+        <button
+          type="button"
+          id="btnAdicionarProduto"
+          class="btn-adicionar"
+        >
+          <span>＋</span>
+          Adicionar outro produto
+        </button>
+
+
+        <!-- RESUMO -->
+
+        <div class="resumo-produtos">
+
+          <div>
+
+            <span>Total de unidades</span>
+
+            <strong id="totalUnidades">
+              0
+            </strong>
+
+          </div>
+
+          <div>
+
+            <span>Valor total consignado</span>
+
+            <strong id="valorTotal">
+              R$ 0,00
+            </strong>
+
+          </div>
+
+        </div>
+
+      </section>
+
+
+      <!-- CONDIÇÕES -->
+
+      <section class="card">
+
+        <div class="card-cabecalho">
+
+          <div class="numero-secao">04</div>
+
+          <div>
+            <h2>Condições</h2>
+            <p>Defina como serão realizados os acertos</p>
+          </div>
+
+        </div>
+
+
+        <div class="grid grid-2">
+
+          <div class="campo">
+
+            <label for="periodicidade">
+              Periodicidade do acerto
+            </label>
+
+            <select id="periodicidade">
+
+              <option value="">
+                Selecione
+              </option>
+
+              <option value="Semanal">
+                Semanal
+              </option>
+
+              <option value="Quinzenal">
+                Quinzenal
+              </option>
+
+              <option value="Mensal">
+                Mensal
+              </option>
+
+              <option value="A combinar">
+                A combinar
+              </option>
+
+            </select>
+
+          </div>
+
+
+          <div class="campo">
+
+            <label for="formaPagamento">
+              Forma de pagamento
+            </label>
+
+            <select id="formaPagamento">
+
+              <option value="">
+                Selecione
+              </option>
+
+              <option value="PIX">
+                PIX
+              </option>
+
+              <option value="Dinheiro">
+                Dinheiro
+              </option>
+
+              <option value="Transferência">
+                Transferência
+              </option>
+
+              <option value="A combinar">
+                A combinar
+              </option>
+
+            </select>
+
+          </div>
+
+        </div>
+
+
+        <div class="campo">
+
+          <label for="observacoes">
+            Observações
+          </label>
+
+          <textarea
+            id="observacoes"
+            rows="3"
+            maxlength="500"
+            placeholder="Informações adicionais, se necessário."
+          ></textarea>
+
+          <small class="contador">
+            <span id="contadorObservacoes">0</span>/500
+          </small>
+
+        </div>
+
+      </section>
+
+
+      <!-- TERMOS -->
+
+      <section class="card card-termo">
+
+        <div class="card-cabecalho">
+
+          <div class="numero-secao">05</div>
+
+          <div>
+            <h2>Conferência</h2>
+            <p>Confirme antes de gerar o documento</p>
+          </div>
+
+        </div>
+
+
+        <div class="termo-resumo">
+
+          <h3>
+            Condições da consignação
+          </h3>
+
+          <p>
+            Os produtos descritos no termo serão entregues ao
+            estabelecimento em regime de consignação.
+          </p>
+
+          <p>
+            O estabelecimento efetuará o pagamento somente das
+            unidades efetivamente vendidas, conforme os valores
+            registrados no documento.
+          </p>
+
+          <p>
+            Produtos não vendidos poderão ser devolvidos à LINKA Gift,
+            desde que permaneçam em condições adequadas para
+            comercialização.
+          </p>
+
+          <p>
+            Em caso de perda, extravio ou dano que impossibilite a
+            comercialização enquanto o produto estiver sob
+            responsabilidade do estabelecimento, a respectiva unidade
+            será considerada no acerto.
+          </p>
+
+        </div>
+
+
+        <label class="checkbox-confirmacao">
+
+          <input
+            type="checkbox"
+            id="confirmacao"
+            required
+          >
+
+          <span class="check-visual"></span>
+
+          <span>
+            Confirmo que os dados preenchidos foram conferidos
+            antes da geração do termo.
+          </span>
+
+        </label>
+
+      </section>
+
+
+      <!-- AÇÕES -->
+
+      <section class="acoes">
+
+        <button
+          type="button"
+          id="btnLimpar"
+          class="btn btn-secundario"
+        >
+          Limpar formulário
+        </button>
+
+        <button
+          type="submit"
+          id="btnGerar"
+          class="btn btn-principal"
+        >
+          <span>📄</span>
+          Revisar e gerar termo
+        </button>
+
+      </section>
+
+    </form>
+
+
+    <!-- =====================================================
+         PRÉ-VISUALIZAÇÃO
+    ====================================================== -->
+
+    <section
+      id="areaPreview"
+      class="preview-container oculto"
+    >
+
+      <div class="preview-cabecalho">
+
+        <div>
+
+          <span class="preview-etiqueta">
+            DOCUMENTO PRONTO
+          </span>
+
+          <h2>
+            Confira antes de compartilhar
+          </h2>
+
+        </div>
+
+        <button
+          type="button"
+          id="btnEditar"
+          class="btn-editar"
+        >
+          ✏️ Editar
+        </button>
+
+      </div>
+
+
+      <!-- FOLHA A4 -->
+
+      <article
+        id="documentoA4"
+        class="documento-a4"
+      >
+
+        <header class="doc-topo">
+
+          <div class="doc-marca">
+
+            <strong>LINKA</strong>
+            <span>Gift</span>
+
+          </div>
+
+          <div class="doc-titulo">
+
+            <h1>
+              TERMO DE ENTREGA DE PRODUTOS
+            </h1>
+
+            <p>
+              EM CONSIGNAÇÃO
+            </p>
+
+          </div>
+
+        </header>
+
+
+        <div class="doc-identificacao">
+
+          <div>
+            <span>Nº DA CONSIGNAÇÃO</span>
+            <strong id="docNumero">—</strong>
+          </div>
+
+          <div>
+            <span>DATA</span>
+            <strong id="docData">—</strong>
+          </div>
+
+        </div>
+
+
+        <section class="doc-secao">
+
+          <h2>
+            1. DADOS DO ESTABELECIMENTO
+          </h2>
+
+          <div class="doc-dados">
+
+            <p>
+              <span>Loja / Razão Social:</span>
+              <strong id="docLoja">—</strong>
+            </p>
+
+            <p>
+              <span>CNPJ / CPF:</span>
+              <strong id="docCnpj">—</strong>
+            </p>
+
+            <p>
+              <span>Responsável:</span>
+              <strong id="docResponsavel">—</strong>
+            </p>
+
+            <div class="doc-duplo">
+
+              <p>
+                <span>Telefone / WhatsApp:</span>
+                <strong id="docTelefone">—</strong>
+              </p>
+
+              <p>
+                <span>E-mail:</span>
+                <strong id="docEmail">—</strong>
+              </p>
+
+            </div>
+
+            <p>
+              <span>Cidade / UF:</span>
+              <strong id="docCidade">—</strong>
+            </p>
+
+          </div>
+
+        </section>
+
+
+        <section class="doc-secao">
+
+          <h2>
+            2. PRODUTOS ENTREGUES
+          </h2>
+
+          <div class="doc-tabela-wrapper">
+
+            <table class="doc-tabela">
+
+              <thead>
+
+                <tr>
+                  <th>Produto / Modelo</th>
+                  <th>Qtd.</th>
+                  <th>Valor Loja</th>
+                  <th>Preço Sugerido</th>
+                </tr>
+
+              </thead>
+
+              <tbody id="docProdutos">
+              </tbody>
+
+            </table>
+
+          </div>
+
+
+          <div class="doc-totais">
+
+            <div>
+              <span>Total de unidades</span>
+              <strong id="docTotalUnidades">0</strong>
+            </div>
+
+            <div>
+              <span>Valor total consignado</span>
+              <strong id="docValorTotal">R$ 0,00</strong>
+            </div>
+
+          </div>
+
+        </section>
+
+
+        <section class="doc-secao">
+
+          <h2>
+            3. CONDIÇÕES DA CONSIGNAÇÃO
+          </h2>
+
+          <div class="doc-texto">
+
+            <p>
+              Os produtos descritos neste termo são entregues ao
+              estabelecimento acima identificado em
+              <strong>regime de consignação</strong>.
+            </p>
+
+            <p>
+              O estabelecimento efetuará o pagamento somente das
+              unidades efetivamente vendidas, conforme os valores
+              acordados neste documento.
+            </p>
+
+            <p>
+              Os produtos não vendidos poderão ser devolvidos à
+              LINKA Gift, desde que permaneçam em condições adequadas
+              para comercialização.
+            </p>
+
+            <p>
+              Em caso de perda, extravio ou dano que impossibilite a
+              comercialização enquanto o produto estiver sob
+              responsabilidade do estabelecimento, a respectiva
+              unidade será considerada no próximo acerto.
+            </p>
+
+          </div>
+
+
+          <div class="doc-condicoes">
+
+            <p>
+              <span>Periodicidade do acerto:</span>
+              <strong id="docPeriodicidade">—</strong>
+            </p>
+
+            <p>
+              <span>Forma de pagamento:</span>
+              <strong id="docPagamento">—</strong>
+            </p>
+
+          </div>
+
+
+          <div
+            id="docObservacoesBox"
+            class="doc-observacoes oculto"
+          >
+
+            <span>Observações:</span>
+
+            <p id="docObservacoes"></p>
+
+          </div>
+
+        </section>
+
+
+        <section class="doc-secao">
+
+          <h2>
+            4. DECLARAÇÃO DE RECEBIMENTO
+          </h2>
+
+          <p class="doc-declaracao">
+            Declaro que recebi os produtos relacionados neste
+            documento nas quantidades informadas, conferi os dados
+            acima e estou de acordo com as condições de consignação
+            apresentadas neste termo.
+          </p>
+
+
+          <div class="doc-local-data">
+
+            <p>
+              Local:
+              <span>________________________________</span>
+            </p>
+
+            <p>
+              Data:
+              <span>____ / ____ / ______</span>
+            </p>
+
+          </div>
+
+
+          <div class="assinaturas">
+
+            <div class="assinatura">
+
+              <div class="linha-assinatura"></div>
+
+              <strong>
+                LINKA Gift
+              </strong>
+
+              <span>
+                Responsável / Assinatura
+              </span>
+
+            </div>
+
+
+            <div class="assinatura">
+
+              <div class="linha-assinatura"></div>
+
+              <strong id="docAssinaturaLoja">
+                ESTABELECIMENTO
+              </strong>
+
+              <span>
+                Responsável / Assinatura
+              </span>
+
+            </div>
+
+          </div>
+
+        </section>
+
+
+        <footer class="doc-rodape">
+
+          <p>
+            Este documento é emitido em
+            <strong>2 (duas) vias de igual teor</strong>,
+            ficando uma via com a LINKA Gift e uma via com o
+            estabelecimento consignatário.
+          </p>
+
+          <div class="doc-rodape-marca">
+            LINKA Gift · Tecnologia que conecta
+          </div>
+
+        </footer>
+
+      </article>
+
+
+      <!-- BOTÕES DO DOCUMENTO -->
+
+      <div class="acoes-documento">
+
+        <button
+          type="button"
+          id="btnImprimir"
+          class="btn btn-secundario"
+        >
+          🖨️ Imprimir
+        </button>
+
+        <button
+          type="button"
+          id="btnPDF"
+          class="btn btn-principal"
+        >
+          📄 Salvar em PDF
+        </button>
+
+        <button
+          type="button"
+          id="btnCompartilhar"
+          class="btn btn-destaque"
+        >
+          📤 Compartilhar
+        </button>
+
+      </div>
+
+
+      <p class="aviso-compartilhamento">
+        A disponibilidade do compartilhamento direto depende do
+        navegador e do dispositivo utilizado.
+      </p>
+
+    </section>
+
+  </main>
+
+
+  <!-- =====================================================
+       RODAPÉ DO SISTEMA
+  ====================================================== -->
+
+  <footer class="rodape-site">
+
+    <strong>LINKA Gift</strong>
+
+    <span>
+      Gerador de Termo de Consignação
+    </span>
+
+    <small>
+      Os dados preenchidos não são armazenados por este gerador.
+    </small>
+
+  </footer>
+
+
+  <!-- =====================================================
+       MODAL
+  ====================================================== -->
+
+  <div
+    id="modal"
+    class="modal oculto"
+    aria-hidden="true"
+  >
+
+    <div class="modal-overlay"></div>
+
+    <div
+      class="modal-conteudo"
+      role="dialog"
+      aria-modal="true"
+      aria-labelledby="modalTitulo"
+    >
+
+      <div
+        id="modalIcone"
+        class="modal-icone"
+      >
+        ✓
+      </div>
+
+      <h2 id="modalTitulo">
+        Atenção
+      </h2>
+
+      <p id="modalMensagem">
+      </p>
+
+      <button
+        type="button"
+        id="btnFecharModal"
+        class="btn btn-principal"
+      >
+        Entendi
+      </button>
+
+    </div>
+
+  </div>
+
+
+  <script src="script.js"></script>
+
+</body>
+
+</html>
+
