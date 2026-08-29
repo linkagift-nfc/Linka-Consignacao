@@ -11,52 +11,23 @@ document.addEventListener("DOMContentLoaded", () => {
   ======================================================= */
 
   const form = document.getElementById("formConsignacao");
+  const numeroConsignacao = document.getElementById("numeroConsignacao");
+  const dataConsignacao = document.getElementById("dataConsignacao");
+  const listaProdutos = document.getElementById("listaProdutos");
+  const btnAdicionarProduto = document.getElementById("btnAdicionarProduto");
+  const btnLimpar = document.getElementById("btnLimpar");
+  const btnEditar = document.getElementById("btnEditar");
+  const btnImprimir = document.getElementById("btnImprimir");
+  const btnPDF = document.getElementById("btnPDF");
+  const btnCompartilhar = document.getElementById("btnCompartilhar");
+  const btnWhatsApp = document.getElementById("btnWhatsApp");
 
-  const numeroConsignacao =
-    document.getElementById("numeroConsignacao");
-
-  const dataConsignacao =
-    document.getElementById("dataConsignacao");
-
-  const listaProdutos =
-    document.getElementById("listaProdutos");
-
-  const btnAdicionarProduto =
-    document.getElementById("btnAdicionarProduto");
-
-  const btnLimpar =
-    document.getElementById("btnLimpar");
-
-  const btnEditar =
-    document.getElementById("btnEditar");
-
-  const btnImprimir =
-    document.getElementById("btnImprimir");
-
-  const btnPDF =
-    document.getElementById("btnPDF");
-
-  const btnCompartilhar =
-    document.getElementById("btnCompartilhar");
-
-  const totalUnidades =
-    document.getElementById("totalUnidades");
-
-  const valorTotal =
-    document.getElementById("valorTotal");
-
-  const observacoes =
-    document.getElementById("observacoes");
-
-  const contadorObservacoes =
-    document.getElementById("contadorObservacoes");
-
-  const areaPreview =
-    document.getElementById("areaPreview");
-
-  const confirmacao =
-    document.getElementById("confirmacao");
-
+  const totalUnidades = document.getElementById("totalUnidades");
+  const valorTotal = document.getElementById("valorTotal");
+  const observacoes = document.getElementById("observacoes");
+  const contadorObservacoes = document.getElementById("contadorObservacoes");
+  const areaPreview = document.getElementById("areaPreview");
+  const confirmacao = document.getElementById("confirmacao");
 
   /* =======================================================
      ASSINATURAS
@@ -91,30 +62,17 @@ document.addEventListener("DOMContentLoaded", () => {
      MODAL
   ======================================================= */
 
-  const modal =
-    document.getElementById("modal");
-
-  const modalTitulo =
-    document.getElementById("modalTitulo");
-
-  const modalMensagem =
-    document.getElementById("modalMensagem");
-
-  const modalIcone =
-    document.getElementById("modalIcone");
-
-  const btnFecharModal =
-    document.getElementById("btnFecharModal");
+  const modal = document.getElementById("modal");
+  const modalTitulo = document.getElementById("modalTitulo");
+  const modalMensagem = document.getElementById("modalMensagem");
+  const modalIcone = document.getElementById("modalIcone");
+  const btnFecharModal = document.getElementById("btnFecharModal");
 
   const modalOverlay =
     modal.querySelector(".modal-overlay");
 
 
-  function mostrarModal(
-    titulo,
-    mensagem,
-    icone = "!"
-  ) {
+  function mostrarModal(titulo, mensagem, icone = "!") {
 
     modalTitulo.textContent = titulo;
     modalMensagem.textContent = mensagem;
@@ -155,7 +113,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
 
   /* =======================================================
-     SISTEMA DE ASSINATURA DIGITAL
+     ASSINATURA DIGITAL
   ======================================================= */
 
   function criarAssinaturaDigital(
@@ -169,52 +127,31 @@ document.addEventListener("DOMContentLoaded", () => {
       canvas.getContext("2d");
 
     let assinando = false;
-
     let assinaturaFeita = false;
 
-
-    /* -------------------------------------------------------
-       CONFIGURAR CANETA
-    ------------------------------------------------------- */
 
     function prepararContexto() {
 
       contexto.lineWidth = 2.4;
-
       contexto.lineCap = "round";
-
       contexto.lineJoin = "round";
-
       contexto.strokeStyle = "#10233f";
 
     }
 
 
-    /* -------------------------------------------------------
-       AJUSTAR TAMANHO DO CANVAS
-    ------------------------------------------------------- */
-
-    function ajustarCanvas(
-      preservar = true
-    ) {
+    function ajustarCanvas(preservar = true) {
 
       const rect =
         canvas.getBoundingClientRect();
 
-
-      if (
-        !rect.width ||
-        !rect.height
-      ) {
-
+      if (!rect.width || !rect.height) {
         return;
-
       }
 
 
       const imagemAnterior =
-        preservar &&
-        assinaturaFeita
+        preservar && assinaturaFeita
           ? canvas.toDataURL("image/png")
           : null;
 
@@ -227,7 +164,6 @@ document.addEventListener("DOMContentLoaded", () => {
         Math.round(
           rect.width * proporcao
         );
-
 
       canvas.height =
         Math.round(
@@ -264,7 +200,6 @@ document.addEventListener("DOMContentLoaded", () => {
             rect.height
           );
 
-
           prepararContexto();
 
         };
@@ -278,13 +213,7 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
 
-    /* -------------------------------------------------------
-       POSIÇÃO DO DEDO / MOUSE
-    ------------------------------------------------------- */
-
-    function pegarPosicao(
-      evento
-    ) {
+    function pegarPosicao(evento) {
 
       const rect =
         canvas.getBoundingClientRect();
@@ -305,30 +234,18 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
 
-    /* -------------------------------------------------------
-       INICIAR ASSINATURA
-    ------------------------------------------------------- */
-
-    function iniciar(
-      evento
-    ) {
+    function iniciar(evento) {
 
       evento.preventDefault();
 
-
       assinando = true;
-
       assinaturaFeita = true;
 
-
       const posicao =
-        pegarPosicao(
-          evento
-        );
+        pegarPosicao(evento);
 
 
       contexto.beginPath();
-
 
       contexto.moveTo(
         posicao.x,
@@ -338,7 +255,6 @@ document.addEventListener("DOMContentLoaded", () => {
 
       status.textContent =
         "Assinado";
-
 
       status.classList.add(
         "assinado"
@@ -356,18 +272,10 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
 
-    /* -------------------------------------------------------
-       DESENHAR
-    ------------------------------------------------------- */
-
-    function desenhar(
-      evento
-    ) {
+    function desenhar(evento) {
 
       if (!assinando) {
-
         return;
-
       }
 
 
@@ -375,9 +283,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
 
       const posicao =
-        pegarPosicao(
-          evento
-        );
+        pegarPosicao(evento);
 
 
       contexto.lineTo(
@@ -385,29 +291,19 @@ document.addEventListener("DOMContentLoaded", () => {
         posicao.y
       );
 
-
       contexto.stroke();
 
     }
 
 
-    /* -------------------------------------------------------
-       FINALIZAR
-    ------------------------------------------------------- */
-
-    function finalizar(
-      evento
-    ) {
+    function finalizar(evento) {
 
       if (!assinando) {
-
         return;
-
       }
 
 
       assinando = false;
-
 
       contexto.closePath();
 
@@ -430,14 +326,9 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
 
-    /* -------------------------------------------------------
-       LIMPAR
-    ------------------------------------------------------- */
-
     function limpar() {
 
       contexto.save();
-
 
       contexto.setTransform(
         1,
@@ -459,19 +350,16 @@ document.addEventListener("DOMContentLoaded", () => {
 
       contexto.restore();
 
-
       prepararContexto();
 
 
       assinaturaFeita = false;
-
       assinando = false;
 
 
       imagemDocumento.removeAttribute(
         "src"
       );
-
 
       imagemDocumento.classList.remove(
         "ativa"
@@ -481,17 +369,12 @@ document.addEventListener("DOMContentLoaded", () => {
       status.textContent =
         "Aguardando";
 
-
       status.classList.remove(
         "assinado"
       );
 
     }
 
-
-    /* -------------------------------------------------------
-       ENVIAR ASSINATURA PARA O DOCUMENTO
-    ------------------------------------------------------- */
 
     function atualizarDocumento() {
 
@@ -501,11 +384,9 @@ document.addEventListener("DOMContentLoaded", () => {
           "src"
         );
 
-
         imagemDocumento.classList.remove(
           "ativa"
         );
-
 
         return;
 
@@ -513,9 +394,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
 
       imagemDocumento.src =
-        canvas.toDataURL(
-          "image/png"
-        );
+        canvas.toDataURL("image/png");
 
 
       imagemDocumento.classList.add(
@@ -525,33 +404,25 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
 
-    /* -------------------------------------------------------
-       EVENTOS
-    ------------------------------------------------------- */
-
     canvas.addEventListener(
       "pointerdown",
       iniciar
     );
-
 
     canvas.addEventListener(
       "pointermove",
       desenhar
     );
 
-
     canvas.addEventListener(
       "pointerup",
       finalizar
     );
 
-
     canvas.addEventListener(
       "pointercancel",
       finalizar
     );
-
 
     canvas.addEventListener(
       "pointerleave",
@@ -581,10 +452,6 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 
 
-  /* =======================================================
-     CRIAR AS DUAS ASSINATURAS
-  ======================================================= */
-
   const assinaturaLinka =
     criarAssinaturaDigital(
       canvasAssinaturaLinka,
@@ -604,7 +471,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
 
   /* =======================================================
-     DATA PADRÃO
+     DATA ATUAL
   ======================================================= */
 
   function definirDataAtual() {
@@ -612,27 +479,18 @@ document.addEventListener("DOMContentLoaded", () => {
     const agora =
       new Date();
 
-
     const ano =
       agora.getFullYear();
-
 
     const mes =
       String(
         agora.getMonth() + 1
-      ).padStart(
-        2,
-        "0"
-      );
-
+      ).padStart(2, "0");
 
     const dia =
       String(
         agora.getDate()
-      ).padStart(
-        2,
-        "0"
-      );
+      ).padStart(2, "0");
 
 
     dataConsignacao.value =
@@ -642,7 +500,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
 
   /* =======================================================
-     NÚMERO AUTOMÁTICO
+     NÚMERO DA CONSIGNAÇÃO
   ======================================================= */
 
   function gerarNumeroConsignacao() {
@@ -654,50 +512,30 @@ document.addEventListener("DOMContentLoaded", () => {
     const ano =
       agora.getFullYear();
 
-
     const mes =
       String(
         agora.getMonth() + 1
-      ).padStart(
-        2,
-        "0"
-      );
-
+      ).padStart(2, "0");
 
     const dia =
       String(
         agora.getDate()
-      ).padStart(
-        2,
-        "0"
-      );
-
+      ).padStart(2, "0");
 
     const hora =
       String(
         agora.getHours()
-      ).padStart(
-        2,
-        "0"
-      );
-
+      ).padStart(2, "0");
 
     const minuto =
       String(
         agora.getMinutes()
-      ).padStart(
-        2,
-        "0"
-      );
-
+      ).padStart(2, "0");
 
     const segundo =
       String(
         agora.getSeconds()
-      ).padStart(
-        2,
-        "0"
-      );
+      ).padStart(2, "0");
 
 
     numeroConsignacao.value =
@@ -710,14 +548,10 @@ document.addEventListener("DOMContentLoaded", () => {
      MOEDA
   ======================================================= */
 
-  function valorParaNumero(
-    valor
-  ) {
+  function valorParaNumero(valor) {
 
     if (!valor) {
-
       return 0;
-
     }
 
 
@@ -731,43 +565,32 @@ document.addEventListener("DOMContentLoaded", () => {
 
 
     const numero =
-      parseFloat(
-        texto
-      );
+      parseFloat(texto);
 
 
-    return Number.isFinite(
-      numero
-    )
+    return Number.isFinite(numero)
       ? numero
       : 0;
 
   }
 
 
-  function numeroParaMoeda(
-    valor
-  ) {
+  function numeroParaMoeda(valor) {
 
     return Number(
       valor || 0
     ).toLocaleString(
       "pt-BR",
       {
-
         style: "currency",
-
         currency: "BRL"
-
       }
     );
 
   }
 
 
-  function formatarCampoMoeda(
-    input
-  ) {
+  function formatarCampoMoeda(input) {
 
     let valor =
       input.value.replace(
@@ -795,11 +618,8 @@ document.addEventListener("DOMContentLoaded", () => {
       valor.toLocaleString(
         "pt-BR",
         {
-
           minimumFractionDigits: 2,
-
           maximumFractionDigits: 2
-
         }
       );
 
@@ -825,26 +645,17 @@ document.addEventListener("DOMContentLoaded", () => {
 
       let valor =
         telefone.value
-          .replace(
-            /\D/g,
-            ""
-          )
-          .slice(
-            0,
-            11
-          );
+          .replace(/\D/g, "")
+          .slice(0, 11);
 
 
-      if (
-        valor.length <= 10
-      ) {
+      if (valor.length <= 10) {
 
         valor =
           valor.replace(
             /^(\d{2})(\d)/,
             "($1) $2"
           );
-
 
         valor =
           valor.replace(
@@ -859,7 +670,6 @@ document.addEventListener("DOMContentLoaded", () => {
             /^(\d{2})(\d)/,
             "($1) $2"
           );
-
 
         valor =
           valor.replace(
@@ -893,19 +703,11 @@ document.addEventListener("DOMContentLoaded", () => {
 
       let valor =
         cnpj.value
-          .replace(
-            /\D/g,
-            ""
-          )
-          .slice(
-            0,
-            14
-          );
+          .replace(/\D/g, "")
+          .slice(0, 14);
 
 
-      if (
-        valor.length <= 11
-      ) {
+      if (valor.length <= 11) {
 
         valor =
           valor.replace(
@@ -913,13 +715,11 @@ document.addEventListener("DOMContentLoaded", () => {
             "$1.$2"
           );
 
-
         valor =
           valor.replace(
             /(\d{3})(\d)/,
             "$1.$2"
           );
-
 
         valor =
           valor.replace(
@@ -935,20 +735,17 @@ document.addEventListener("DOMContentLoaded", () => {
             "$1.$2"
           );
 
-
         valor =
           valor.replace(
             /^(\d{2})\.(\d{3})(\d)/,
             "$1.$2.$3"
           );
 
-
         valor =
           valor.replace(
             /\.(\d{3})(\d)/,
             ".$1/$2"
           );
-
 
         valor =
           valor.replace(
@@ -987,10 +784,7 @@ document.addEventListener("DOMContentLoaded", () => {
             ""
           )
           .toUpperCase()
-          .slice(
-            0,
-            2
-          );
+          .slice(0, 2);
 
     }
   );
@@ -1018,21 +812,17 @@ document.addEventListener("DOMContentLoaded", () => {
   let contadorProdutos = 1;
 
 
-  function configurarProduto(
-    produtoItem
-  ) {
+  function configurarProduto(produtoItem) {
 
     const quantidade =
       produtoItem.querySelector(
         ".produto-quantidade"
       );
 
-
     const valorLoja =
       produtoItem.querySelector(
         ".produto-valor-loja"
       );
-
 
     const precoSugerido =
       produtoItem.querySelector(
@@ -1072,10 +862,6 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 
 
-  /* =======================================================
-     CRIAR NOVO PRODUTO
-  ======================================================= */
-
   function criarProduto() {
 
     contadorProdutos++;
@@ -1084,16 +870,11 @@ document.addEventListener("DOMContentLoaded", () => {
     const numero =
       String(
         contadorProdutos
-      ).padStart(
-        2,
-        "0"
-      );
+      ).padStart(2, "0");
 
 
     const div =
-      document.createElement(
-        "div"
-      );
+      document.createElement("div");
 
 
     div.className =
@@ -1122,7 +903,6 @@ document.addEventListener("DOMContentLoaded", () => {
 
       </div>
 
-
       <div class="campo">
 
         <label>
@@ -1137,7 +917,6 @@ document.addEventListener("DOMContentLoaded", () => {
         >
 
       </div>
-
 
       <div class="grid grid-3">
 
@@ -1158,7 +937,6 @@ document.addEventListener("DOMContentLoaded", () => {
           >
 
         </div>
-
 
         <div class="campo">
 
@@ -1182,7 +960,6 @@ document.addEventListener("DOMContentLoaded", () => {
 
         </div>
 
-
         <div class="campo">
 
           <label>
@@ -1205,7 +982,6 @@ document.addEventListener("DOMContentLoaded", () => {
         </div>
 
       </div>
-
 
       <div class="produto-subtotal">
 
@@ -1257,10 +1033,6 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 
 
-  /* =======================================================
-     RENUMERAR PRODUTOS
-  ======================================================= */
-
   function renumerarProdutos() {
 
     const produtos =
@@ -1283,10 +1055,7 @@ document.addEventListener("DOMContentLoaded", () => {
           titulo.textContent =
             `Produto ${String(
               index + 1
-            ).padStart(
-              2,
-              "0"
-            )}`;
+            ).padStart(2, "0")}`;
 
         }
 
@@ -1303,7 +1072,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
 
   /* =======================================================
-     CÁLCULOS
+     TOTAIS
   ======================================================= */
 
   function calcularTotais() {
@@ -1315,7 +1084,6 @@ document.addEventListener("DOMContentLoaded", () => {
 
 
     let unidades = 0;
-
     let total = 0;
 
 
@@ -1342,21 +1110,13 @@ document.addEventListener("DOMContentLoaded", () => {
           quantidade * valor;
 
 
-        unidades +=
-          quantidade;
+        unidades += quantidade;
+        total += subtotal;
 
 
-        total +=
-          subtotal;
-
-
-        const subtotalElemento =
-          produto.querySelector(
-            ".subtotal"
-          );
-
-
-        subtotalElemento.textContent =
+        produto.querySelector(
+          ".subtotal"
+        ).textContent =
           numeroParaMoeda(
             subtotal
           );
@@ -1378,17 +1138,13 @@ document.addEventListener("DOMContentLoaded", () => {
 
 
   /* =======================================================
-     DATA BRASILEIRA
+     DATA BR
   ======================================================= */
 
-  function formatarDataBR(
-    dataISO
-  ) {
+  function formatarDataBR(dataISO) {
 
     if (!dataISO) {
-
       return "—";
-
     }
 
 
@@ -1396,12 +1152,8 @@ document.addEventListener("DOMContentLoaded", () => {
       dataISO.split("-");
 
 
-    if (
-      partes.length !== 3
-    ) {
-
+    if (partes.length !== 3) {
       return dataISO;
-
     }
 
 
@@ -1410,6 +1162,147 @@ document.addEventListener("DOMContentLoaded", () => {
       `${partes[1]}/` +
       `${partes[0]}`
     );
+
+  }
+
+
+  /* =======================================================
+     SEGURANÇA HTML
+  ======================================================= */
+
+  function escaparHTML(texto) {
+
+    return String(texto)
+      .replace(/&/g, "&amp;")
+      .replace(/</g, "&lt;")
+      .replace(/>/g, "&gt;")
+      .replace(/"/g, "&quot;")
+      .replace(/'/g, "&#039;");
+
+  }
+
+
+  /* =======================================================
+     PRODUTOS NO DOCUMENTO
+  ======================================================= */
+
+  function preencherProdutosDocumento() {
+
+    const tbody =
+      document.getElementById(
+        "docProdutos"
+      );
+
+
+    tbody.innerHTML = "";
+
+
+    const produtos =
+      listaProdutos.querySelectorAll(
+        ".produto-item"
+      );
+
+
+    let unidades = 0;
+    let total = 0;
+
+
+    produtos.forEach(
+      produto => {
+
+        const nome =
+          produto.querySelector(
+            ".produto-nome"
+          ).value.trim();
+
+
+        const quantidade =
+          Number(
+            produto.querySelector(
+              ".produto-quantidade"
+            ).value
+          ) || 0;
+
+
+        const valorLoja =
+          valorParaNumero(
+            produto.querySelector(
+              ".produto-valor-loja"
+            ).value
+          );
+
+
+        const precoSugerido =
+          valorParaNumero(
+            produto.querySelector(
+              ".produto-preco-sugerido"
+            ).value
+          );
+
+
+        if (!nome) {
+          return;
+        }
+
+
+        unidades += quantidade;
+
+        total +=
+          quantidade *
+          valorLoja;
+
+
+        const linha =
+          document.createElement("tr");
+
+
+        linha.innerHTML = `
+
+          <td>
+            ${escaparHTML(nome)}
+          </td>
+
+          <td>
+            ${quantidade}
+          </td>
+
+          <td>
+            ${numeroParaMoeda(valorLoja)}
+          </td>
+
+          <td>
+            ${
+              precoSugerido > 0
+                ? numeroParaMoeda(
+                    precoSugerido
+                  )
+                : "—"
+            }
+          </td>
+
+        `;
+
+
+        tbody.appendChild(
+          linha
+        );
+
+      }
+    );
+
+
+    document.getElementById(
+      "docTotalUnidades"
+    ).textContent =
+      unidades;
+
+
+    document.getElementById(
+      "docValorTotal"
+    ).textContent =
+      numeroParaMoeda(
+        total
+      );
 
   }
 
@@ -1491,8 +1384,7 @@ document.addEventListener("DOMContentLoaded", () => {
     document.getElementById(
       "docResponsavel"
     ).textContent =
-      responsavel ||
-      "—";
+      responsavel || "—";
 
 
     document.getElementById(
@@ -1536,15 +1428,15 @@ document.addEventListener("DOMContentLoaded", () => {
       "A combinar";
 
 
-    const assinaturaLojaNome =
+    const docAssinaturaLoja =
       document.getElementById(
         "docAssinaturaLoja"
       );
 
 
-    if (assinaturaLojaNome) {
+    if (docAssinaturaLoja) {
 
-      assinaturaLojaNome.textContent =
+      docAssinaturaLoja.textContent =
         responsavel ||
         "ESTABELECIMENTO";
 
@@ -1553,7 +1445,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
     const docLocal =
       document.getElementById(
-        "docLocal"
+        "docLocalAssinatura"
       );
 
 
@@ -1603,7 +1495,6 @@ document.addEventListener("DOMContentLoaded", () => {
       docObservacoes.textContent =
         observacoes.value.trim();
 
-
       obsBox.classList.remove(
         "oculto"
       );
@@ -1613,15 +1504,12 @@ document.addEventListener("DOMContentLoaded", () => {
       docObservacoes.textContent =
         "";
 
-
       obsBox.classList.add(
         "oculto"
       );
 
     }
 
-
-    /* ASSINATURAS NO DOCUMENTO */
 
     assinaturaLinka
       .atualizarDocumento();
@@ -1634,198 +1522,21 @@ document.addEventListener("DOMContentLoaded", () => {
 
 
   /* =======================================================
-     PRODUTOS NO DOCUMENTO
-  ======================================================= */
-
-  function preencherProdutosDocumento() {
-
-    const tbody =
-      document.getElementById(
-        "docProdutos"
-      );
-
-
-    tbody.innerHTML = "";
-
-
-    const produtos =
-      listaProdutos.querySelectorAll(
-        ".produto-item"
-      );
-
-
-    let unidades = 0;
-
-    let total = 0;
-
-
-    produtos.forEach(
-      produto => {
-
-        const nome =
-          produto.querySelector(
-            ".produto-nome"
-          ).value.trim();
-
-
-        const quantidade =
-          Number(
-            produto.querySelector(
-              ".produto-quantidade"
-            ).value
-          ) || 0;
-
-
-        const valorLoja =
-          valorParaNumero(
-            produto.querySelector(
-              ".produto-valor-loja"
-            ).value
-          );
-
-
-        const precoSugerido =
-          valorParaNumero(
-            produto.querySelector(
-              ".produto-preco-sugerido"
-            ).value
-          );
-
-
-        if (!nome) {
-
-          return;
-
-        }
-
-
-        unidades +=
-          quantidade;
-
-
-        total +=
-          quantidade *
-          valorLoja;
-
-
-        const linha =
-          document.createElement(
-            "tr"
-          );
-
-
-        linha.innerHTML = `
-
-          <td>
-            ${escaparHTML(nome)}
-          </td>
-
-          <td>
-            ${quantidade}
-          </td>
-
-          <td>
-            ${numeroParaMoeda(valorLoja)}
-          </td>
-
-          <td>
-            ${
-              precoSugerido > 0
-                ? numeroParaMoeda(
-                    precoSugerido
-                  )
-                : "—"
-            }
-          </td>
-
-        `;
-
-
-        tbody.appendChild(
-          linha
-        );
-
-      }
-    );
-
-
-    document.getElementById(
-      "docTotalUnidades"
-    ).textContent =
-      unidades;
-
-
-    document.getElementById(
-      "docValorTotal"
-    ).textContent =
-      numeroParaMoeda(
-        total
-      );
-
-  }
-
-
-  /* =======================================================
-     PROTEÇÃO HTML
-  ======================================================= */
-
-  function escaparHTML(
-    texto
-  ) {
-
-    return String(texto)
-      .replace(
-        /&/g,
-        "&amp;"
-      )
-      .replace(
-        /</g,
-        "&lt;"
-      )
-      .replace(
-        />/g,
-        "&gt;"
-      )
-      .replace(
-        /"/g,
-        "&quot;"
-      )
-      .replace(
-        /'/g,
-        "&#039;"
-      );
-
-  }
-
-
-  /* =======================================================
      VALIDAÇÃO
   ======================================================= */
 
   function validarFormulario() {
 
-    if (
-      !form.checkValidity()
-    ) {
+    if (!form.checkValidity()) {
 
       form.reportValidity();
-
-
-      mostrarModal(
-        "Preencha os campos obrigatórios",
-        "Verifique os campos marcados com * antes de gerar o termo.",
-        "!"
-      );
-
 
       return false;
 
     }
 
 
-    if (
-      !confirmacao.checked
-    ) {
+    if (!confirmacao.checked) {
 
       mostrarModal(
         "Confirmação necessária",
@@ -1833,7 +1544,6 @@ document.addEventListener("DOMContentLoaded", () => {
         "!"
       );
 
-
       return false;
 
     }
@@ -1845,8 +1555,7 @@ document.addEventListener("DOMContentLoaded", () => {
       );
 
 
-    let produtoValido =
-      false;
+    let produtoValido = false;
 
 
     produtos.forEach(
@@ -1880,8 +1589,7 @@ document.addEventListener("DOMContentLoaded", () => {
           valor > 0
         ) {
 
-          produtoValido =
-            true;
+          produtoValido = true;
 
         }
 
@@ -1889,44 +1597,34 @@ document.addEventListener("DOMContentLoaded", () => {
     );
 
 
-    if (
-      !produtoValido
-    ) {
+    if (!produtoValido) {
 
       mostrarModal(
         "Produto inválido",
-        "Informe ao menos um produto com quantidade e valor para a loja maiores que zero.",
+        "Informe pelo menos um produto com quantidade e valor para a loja.",
         "!"
       );
-
 
       return false;
 
     }
 
 
-    /* -------------------------------------------------------
-       ASSINATURA LINKA
-    ------------------------------------------------------- */
-
     if (
       !assinaturaLinka.foiAssinada()
     ) {
 
       mostrarModal(
-        "Assinatura da LINKA Gift necessária",
-        "Assine o termo no campo da LINKA Gift antes de gerar o documento.",
+        "Assinatura necessária",
+        "Faça a assinatura da LINKA Gift antes de gerar o termo.",
         "✍"
       );
 
 
       canvasAssinaturaLinka
         .scrollIntoView({
-
           behavior: "smooth",
-
           block: "center"
-
         });
 
 
@@ -1935,28 +1633,21 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
 
-    /* -------------------------------------------------------
-       ASSINATURA LOJA
-    ------------------------------------------------------- */
-
     if (
       !assinaturaLoja.foiAssinada()
     ) {
 
       mostrarModal(
-        "Assinatura do estabelecimento necessária",
-        "Peça ao responsável da loja para assinar com o dedo antes de gerar o documento.",
+        "Assinatura necessária",
+        "Peça ao responsável pelo estabelecimento para assinar o termo.",
         "✍"
       );
 
 
       canvasAssinaturaLoja
         .scrollIntoView({
-
           behavior: "smooth",
-
           block: "center"
-
         });
 
 
@@ -1971,7 +1662,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
 
   /* =======================================================
-     GERAR DOCUMENTO
+     GERAR PREVIEW
   ======================================================= */
 
   form.addEventListener(
@@ -1981,17 +1672,12 @@ document.addEventListener("DOMContentLoaded", () => {
       event.preventDefault();
 
 
-      if (
-        !validarFormulario()
-      ) {
-
+      if (!validarFormulario()) {
         return;
-
       }
 
 
       calcularTotais();
-
 
       preencherDocumento();
 
@@ -2004,14 +1690,10 @@ document.addEventListener("DOMContentLoaded", () => {
       setTimeout(
         () => {
 
-          areaPreview
-            .scrollIntoView({
-
-              behavior: "smooth",
-
-              block: "start"
-
-            });
+          areaPreview.scrollIntoView({
+            behavior: "smooth",
+            block: "start"
+          });
 
         },
         100
@@ -2035,11 +1717,8 @@ document.addEventListener("DOMContentLoaded", () => {
 
 
       form.scrollIntoView({
-
         behavior: "smooth",
-
         block: "start"
-
       });
 
     }
@@ -2047,7 +1726,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
 
   /* =======================================================
-     LIMPAR FORMULÁRIO
+     LIMPAR
   ======================================================= */
 
   btnLimpar.addEventListener(
@@ -2060,12 +1739,8 @@ document.addEventListener("DOMContentLoaded", () => {
         );
 
 
-      if (
-        !confirmar
-      ) {
-
+      if (!confirmar) {
         return;
-
       }
 
 
@@ -2081,12 +1756,8 @@ document.addEventListener("DOMContentLoaded", () => {
       produtos.forEach(
         (produto, index) => {
 
-          if (
-            index > 0
-          ) {
-
+          if (index > 0) {
             produto.remove();
-
           }
 
         }
@@ -2102,47 +1773,35 @@ document.addEventListener("DOMContentLoaded", () => {
         );
 
 
-      primeiroProduto
-        .querySelector(
-          ".produto-nome"
-        )
-        .value =
-          "Medalhão de Identificação Pet NFC";
+      primeiroProduto.querySelector(
+        ".produto-nome"
+      ).value =
+        "Medalhão de Identificação Pet NFC";
 
 
-      primeiroProduto
-        .querySelector(
-          ".produto-quantidade"
-        )
-        .value =
-          "1";
+      primeiroProduto.querySelector(
+        ".produto-quantidade"
+      ).value =
+        "1";
 
 
-      primeiroProduto
-        .querySelector(
-          ".produto-valor-loja"
-        )
-        .value =
-          "";
+      primeiroProduto.querySelector(
+        ".produto-valor-loja"
+      ).value =
+        "";
 
 
-      primeiroProduto
-        .querySelector(
-          ".produto-preco-sugerido"
-        )
-        .value =
-          "";
+      primeiroProduto.querySelector(
+        ".produto-preco-sugerido"
+      ).value =
+        "";
 
 
-      contadorObservacoes
-        .textContent =
-          "0";
+      contadorObservacoes.textContent =
+        "0";
 
-
-      /* LIMPAR ASSINATURAS */
 
       assinaturaLinka.limpar();
-
       assinaturaLoja.limpar();
 
 
@@ -2153,19 +1812,14 @@ document.addEventListener("DOMContentLoaded", () => {
 
       definirDataAtual();
 
-
       gerarNumeroConsignacao();
-
 
       calcularTotais();
 
 
       window.scrollTo({
-
         top: 0,
-
         behavior: "smooth"
-
       });
 
     }
@@ -2187,37 +1841,275 @@ document.addEventListener("DOMContentLoaded", () => {
 
 
   /* =======================================================
+     PDF REAL
+  ======================================================= */
+
+  function nomeArquivoPDF() {
+
+    const numero =
+      (
+        numeroConsignacao.value ||
+        "consignacao"
+      )
+        .replace(
+          /[^a-zA-Z0-9_-]/g,
+          "-"
+        );
+
+
+    return (
+      `LINKA-Gift-${numero}.pdf`
+    );
+
+  }
+
+
+  async function gerarPDFBlob() {
+
+    if (
+      typeof html2pdf ===
+      "undefined"
+    ) {
+
+      throw new Error(
+        "Biblioteca de PDF não carregada."
+      );
+
+    }
+
+
+    preencherDocumento();
+
+
+    const documento =
+      document.getElementById(
+        "documentoA4"
+      );
+
+
+    const opcoes = {
+
+      margin: 0,
+
+      filename:
+        nomeArquivoPDF(),
+
+      image: {
+        type: "jpeg",
+        quality: 0.98
+      },
+
+      html2canvas: {
+        scale: 2,
+        useCORS: true,
+        backgroundColor: "#ffffff",
+        scrollX: 0,
+        scrollY: 0
+      },
+
+      jsPDF: {
+        unit: "mm",
+        format: "a4",
+        orientation: "portrait"
+      },
+
+      pagebreak: {
+        mode: [
+          "avoid-all",
+          "css",
+          "legacy"
+        ]
+      }
+
+    };
+
+
+    return await html2pdf()
+      .set(opcoes)
+      .from(documento)
+      .outputPdf("blob");
+
+  }
+
+
+  /* =======================================================
+     BAIXAR BLOB
+  ======================================================= */
+
+  function baixarBlob(
+    blob,
+    nomeArquivo
+  ) {
+
+    const url =
+      URL.createObjectURL(
+        blob
+      );
+
+
+    const link =
+      document.createElement(
+        "a"
+      );
+
+
+    link.href =
+      url;
+
+    link.download =
+      nomeArquivo;
+
+
+    document.body.appendChild(
+      link
+    );
+
+
+    link.click();
+
+    link.remove();
+
+
+    setTimeout(
+      () => {
+
+        URL.revokeObjectURL(
+          url
+        );
+
+      },
+      1500
+    );
+
+  }
+
+
+  /* =======================================================
+     CRIAR ARQUIVO PDF
+  ======================================================= */
+
+  async function criarArquivoPDF() {
+
+    const blob =
+      await gerarPDFBlob();
+
+
+    return new File(
+      [blob],
+      nomeArquivoPDF(),
+      {
+        type: "application/pdf"
+      }
+    );
+
+  }
+
+
+  /* =======================================================
+     ESTADO DO BOTÃO
+  ======================================================= */
+
+  function definirBotaoCarregando(
+    botao,
+    carregando,
+    textoNormal
+  ) {
+
+    if (!botao) {
+      return;
+    }
+
+
+    if (carregando) {
+
+      botao.dataset.textoOriginal =
+        botao.innerHTML;
+
+
+      botao.disabled =
+        true;
+
+
+      botao.innerHTML =
+        "⏳ Gerando PDF...";
+
+    } else {
+
+      botao.disabled =
+        false;
+
+
+      botao.innerHTML =
+        botao.dataset.textoOriginal ||
+        textoNormal;
+
+    }
+
+  }
+
+
+  /* =======================================================
      SALVAR PDF
   ======================================================= */
 
   btnPDF.addEventListener(
     "click",
-    () => {
+    async () => {
 
-      mostrarModal(
-        "Salvar em PDF",
-        "Na janela de impressão, escolha a opção “Salvar como PDF” ou equivalente no seu dispositivo.",
-        "PDF"
+      definirBotaoCarregando(
+        btnPDF,
+        true,
+        "📄 Salvar em PDF"
       );
 
 
-      setTimeout(
-        () => {
+      try {
 
-          fecharModal();
+        const blob =
+          await gerarPDFBlob();
 
-          window.print();
 
-        },
-        700
-      );
+        baixarBlob(
+          blob,
+          nomeArquivoPDF()
+        );
+
+
+        mostrarModal(
+          "PDF criado",
+          "O termo assinado foi gerado e salvo no seu aparelho.",
+          "✓"
+        );
+
+      } catch (erro) {
+
+        console.error(
+          erro
+        );
+
+
+        mostrarModal(
+          "Não foi possível gerar o PDF",
+          "Verifique sua conexão e tente novamente. Se necessário, use o botão Imprimir.",
+          "!"
+        );
+
+      } finally {
+
+        definirBotaoCarregando(
+          btnPDF,
+          false,
+          "📄 Salvar em PDF"
+        );
+
+      }
 
     }
   );
 
 
   /* =======================================================
-     TEXTO PARA COMPARTILHAR
+     TEXTO DO COMPARTILHAMENTO
   ======================================================= */
 
   function montarTextoCompartilhamento() {
@@ -2229,56 +2121,20 @@ document.addEventListener("DOMContentLoaded", () => {
         .trim();
 
 
-    const responsavel =
-      document
-        .getElementById("responsavel")
-        .value
-        .trim();
+    let texto =
+      "LINKA Gift - Termo de Consignação";
 
 
-    let texto = "";
+    if (loja) {
 
+      texto +=
+        ` - ${loja}`;
 
-    texto +=
-      "LINKA Gift - Termo de Consignação\n\n";
-
-
-    texto +=
-      `Nº: ${numeroConsignacao.value}\n`;
+    }
 
 
     texto +=
-      `Data: ${formatarDataBR(
-        dataConsignacao.value
-      )}\n`;
-
-
-    texto +=
-      `Estabelecimento: ${loja}\n`;
-
-
-    texto +=
-      `Responsável: ${responsavel}\n`;
-
-
-    texto +=
-      `Total de unidades: ${
-        document.getElementById(
-          "docTotalUnidades"
-        ).textContent
-      }\n`;
-
-
-    texto +=
-      `Valor total consignado: ${
-        document.getElementById(
-          "docValorTotal"
-        ).textContent
-      }\n\n`;
-
-
-    texto +=
-      "Termo conferido e assinado pelas partes.";
+      `\nNº ${numeroConsignacao.value}`;
 
 
     return texto;
@@ -2287,91 +2143,205 @@ document.addEventListener("DOMContentLoaded", () => {
 
 
   /* =======================================================
-     COMPARTILHAR
+     COMPARTILHAR PDF / WHATSAPP
+  ======================================================= */
+
+  async function compartilharArquivoPDF(
+    botao,
+    origemWhatsApp = false
+  ) {
+
+    definirBotaoCarregando(
+      botao,
+      true,
+      origemWhatsApp
+        ? "WhatsApp"
+        : "Compartilhar PDF"
+    );
+
+
+    try {
+
+      const arquivo =
+        await criarArquivoPDF();
+
+
+      const dadosCompartilhamento = {
+
+        files: [
+          arquivo
+        ],
+
+        title:
+          `Consignação ${numeroConsignacao.value}`,
+
+        text:
+          montarTextoCompartilhamento()
+
+      };
+
+
+      const podeCompartilharArquivo =
+        navigator.share &&
+        navigator.canShare &&
+        navigator.canShare({
+          files: [
+            arquivo
+          ]
+        });
+
+
+      /*
+       * Em celulares compatíveis,
+       * abre o compartilhamento nativo.
+       *
+       * WhatsApp aparecerá entre
+       * os aplicativos disponíveis.
+       */
+
+      if (
+        podeCompartilharArquivo
+      ) {
+
+        await navigator.share(
+          dadosCompartilhamento
+        );
+
+        return;
+
+      }
+
+
+      /*
+       * FALLBACK
+       *
+       * Se o navegador não suporta
+       * compartilhamento de arquivos,
+       * salva o PDF primeiro.
+       */
+
+      baixarBlob(
+        arquivo,
+        arquivo.name
+      );
+
+
+      if (origemWhatsApp) {
+
+        const mensagem =
+          encodeURIComponent(
+
+            montarTextoCompartilhamento() +
+
+            "\n\nO PDF foi baixado no aparelho. Anexe o arquivo nesta conversa do WhatsApp."
+
+          );
+
+
+        setTimeout(
+          () => {
+
+            window.open(
+              `https://wa.me/?text=${mensagem}`,
+              "_blank"
+            );
+
+          },
+          300
+        );
+
+
+        mostrarModal(
+          "PDF baixado",
+          "Seu navegador não permite anexar automaticamente o PDF ao WhatsApp. O arquivo foi baixado; basta anexá-lo na conversa que será aberta.",
+          "✓"
+        );
+
+      } else {
+
+        mostrarModal(
+          "PDF baixado",
+          "Seu navegador não permite compartilhar arquivos diretamente. O PDF foi baixado para você compartilhar manualmente.",
+          "✓"
+        );
+
+      }
+
+    } catch (erro) {
+
+      if (
+        erro &&
+        erro.name ===
+        "AbortError"
+      ) {
+
+        return;
+
+      }
+
+
+      console.error(
+        erro
+      );
+
+
+      mostrarModal(
+        "Não foi possível compartilhar",
+        "Não conseguimos gerar ou compartilhar o PDF neste dispositivo. Tente novamente ou use Salvar em PDF.",
+        "!"
+      );
+
+    } finally {
+
+      definirBotaoCarregando(
+        botao,
+        false,
+        origemWhatsApp
+          ? "WhatsApp"
+          : "Compartilhar PDF"
+      );
+
+    }
+
+  }
+
+
+  /* =======================================================
+     BOTÃO COMPARTILHAR PDF
   ======================================================= */
 
   btnCompartilhar.addEventListener(
     "click",
     async () => {
 
-      preencherDocumento();
-
-
-      const titulo =
-        `Consignação ${
-          numeroConsignacao.value
-        }`;
-
-
-      const texto =
-        montarTextoCompartilhamento();
-
-
-      if (
-        navigator.share
-      ) {
-
-        try {
-
-          await navigator.share({
-
-            title: titulo,
-
-            text: texto
-
-          });
-
-        } catch (erro) {
-
-          if (
-            erro.name !==
-            "AbortError"
-          ) {
-
-            mostrarModal(
-              "Não foi possível compartilhar",
-              "Use o botão Salvar em PDF e compartilhe o arquivo pelo WhatsApp ou e-mail.",
-              "!"
-            );
-
-          }
-
-        }
-
-      } else {
-
-        try {
-
-          await navigator.clipboard
-            .writeText(
-              texto
-            );
-
-
-          mostrarModal(
-            "Texto copiado",
-            "O resumo da consignação foi copiado. Você pode colá-lo no WhatsApp ou e-mail.",
-            "✓"
-          );
-
-        } catch {
-
-          mostrarModal(
-            "Compartilhamento indisponível",
-            "Use o botão Salvar em PDF e compartilhe o documento pelo WhatsApp ou e-mail.",
-            "!"
-          );
-
-        }
-
-      }
+      await compartilharArquivoPDF(
+        btnCompartilhar,
+        false
+      );
 
     }
   );
 
 
   /* =======================================================
-     CONFIGURAR PRODUTO INICIAL
+     BOTÃO WHATSAPP
+  ======================================================= */
+
+  btnWhatsApp.addEventListener(
+    "click",
+    async () => {
+
+      await compartilharArquivoPDF(
+        btnWhatsApp,
+        true
+      );
+
+    }
+  );
+
+
+  /* =======================================================
+     PRODUTO INICIAL
   ======================================================= */
 
   document
@@ -2382,10 +2352,6 @@ document.addEventListener("DOMContentLoaded", () => {
       configurarProduto
     );
 
-
-  /* =======================================================
-     RECALCULAR
-  ======================================================= */
 
   listaProdutos.addEventListener(
     "change",
@@ -2399,14 +2365,10 @@ document.addEventListener("DOMContentLoaded", () => {
 
   definirDataAtual();
 
-
   gerarNumeroConsignacao();
-
 
   calcularTotais();
 
-
-  /* AJUSTAR CANVAS */
 
   assinaturaLinka
     .ajustarCanvas(
@@ -2421,7 +2383,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
 
   /* =======================================================
-     REDIMENSIONAMENTO DA TELA
+     REDIMENSIONAMENTO
   ======================================================= */
 
   let resizeTimer;
